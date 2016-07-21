@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.pay.dao.GzfAcctTransferOrderHisDao">
+    
+	<sql id="gzfAcctTransferOrderHisColumns">
+		a.id AS "id",
+		a.src_acct_id AS "srcAcctId",
+		a.dest_acct_id AS "destAcctId",
+		a.src_spec_payment_id AS "srcSpecPaymentId",
+		a.dest_spec_payment_id AS "destSpecPaymentId",
+		a.opt_code AS "optCode",
+		a.src_balance_id AS "srcBalanceId",
+		a.dest_balance_id AS "destBalanceId",
+		a.amount AS "amount",
+		a.del_flag AS "delFlag",
+		a.update_date AS "updateDate",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_by AS "updateBy.id",
+		a.remarks AS "remarks",
+		a.process_status AS "processStatus",
+		a.error_msg AS "errorMsg"
+	</sql>
+	
+	<sql id="gzfAcctTransferOrderHisJoins">
+	</sql>
+    
+	<select id="get" resultType="GzfAcctTransferOrderHis">
+		SELECT 
+			<include refid="gzfAcctTransferOrderHisColumns"/>
+		FROM gzf_acct_transfer_order_his a
+		<include refid="gzfAcctTransferOrderHisJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfAcctTransferOrderHis">
+		SELECT 
+			<include refid="gzfAcctTransferOrderHisColumns"/>
+		FROM gzf_acct_transfer_order_his a
+		<include refid="gzfAcctTransferOrderHisJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfAcctTransferOrderHis">
+		SELECT 
+			<include refid="gzfAcctTransferOrderHisColumns"/>
+		FROM gzf_acct_transfer_order_his a
+		<include refid="gzfAcctTransferOrderHisJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_acct_transfer_order_his(
+			id,
+			src_acct_id,
+			dest_acct_id,
+			src_spec_payment_id,
+			dest_spec_payment_id,
+			opt_code,
+			src_balance_id,
+			dest_balance_id,
+			amount,
+			del_flag,
+			update_date,
+			create_date,
+			create_by,
+			update_by,
+			remarks,
+			process_status,
+			error_msg
+		) VALUES (
+			#{id},
+			#{srcAcctId},
+			#{destAcctId},
+			#{srcSpecPaymentId},
+			#{destSpecPaymentId},
+			#{optCode},
+			#{srcBalanceId},
+			#{destBalanceId},
+			#{amount},
+			#{delFlag},
+			#{updateDate},
+			#{createDate},
+			#{createBy.id},
+			#{updateBy.id},
+			#{remarks},
+			#{processStatus},
+			#{errorMsg}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_acct_transfer_order_his SET 	
+			src_acct_id = #{srcAcctId},
+			dest_acct_id = #{destAcctId},
+			src_spec_payment_id = #{srcSpecPaymentId},
+			dest_spec_payment_id = #{destSpecPaymentId},
+			opt_code = #{optCode},
+			src_balance_id = #{srcBalanceId},
+			dest_balance_id = #{destBalanceId},
+			amount = #{amount},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks},
+			process_status = #{processStatus},
+			error_msg = #{errorMsg}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gzf_acct_transfer_order_his SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

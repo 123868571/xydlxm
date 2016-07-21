@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.dlj.dao.ComResidentElecApplyDao">
+    
+	<sql id="comResidentElecApplyColumns">
+		a.id AS "id",
+		a.area_id AS "area.id",
+		a.serial AS "serial",
+		a.cust_no AS "custNo",
+		a.name AS "name",
+		a.card_id AS "cardId",
+		a.address AS "address",
+		a.estate_license AS "estateLicense",
+		a.issuing_authority AS "issuingAuthority",
+		a.operator_name AS "operatorName",
+		a.operator_card_id AS "operatorCardId",
+		a.elec_type AS "elecType",
+		a.capacity AS "capacity",
+		a.pay_type AS "payType",
+		a.pay_wraping AS "payWraping",
+		a.link_name AS "linkName",
+		a.link_tel AS "linkTel",
+		a.check_status AS "checkStatus",
+		a.check_content AS "checkContent",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.op_id AS "opId",
+		a.del_flag AS "delFlag",
+		a.remark AS "remark",
+		a2.name AS "area.name"
+	</sql>
+	
+	<sql id="comResidentElecApplyJoins">
+		LEFT JOIN sys_area a2 ON a2.id = a.area_id
+	</sql>
+    
+	<select id="get" resultType="ComResidentElecApply">
+		SELECT 
+			<include refid="comResidentElecApplyColumns"/>
+		FROM com_resident_elec_apply a
+		<include refid="comResidentElecApplyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ComResidentElecApply">
+		SELECT 
+			<include refid="comResidentElecApplyColumns"/>
+		FROM com_resident_elec_apply a
+		<include refid="comResidentElecApplyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="area != null and area.id != null and area.id != ''">
+				AND a.area_id = #{area.id}
+			</if>
+			<if test="serial != null and serial != ''">
+				AND a.serial = #{serial}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="cardId != null and cardId != ''">
+				AND a.card_id = #{cardId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ComResidentElecApply">
+		SELECT 
+			<include refid="comResidentElecApplyColumns"/>
+		FROM com_resident_elec_apply a
+		<include refid="comResidentElecApplyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO com_resident_elec_apply(
+			id,
+			area_id,
+			serial,
+			cust_no,
+			name,
+			card_id,
+			address,
+			estate_license,
+			issuing_authority,
+			operator_name,
+			operator_card_id,
+			elec_type,
+			capacity,
+			pay_type,
+			pay_wraping,
+			link_name,
+			link_tel,
+			check_status,
+			check_content,
+			create_by,
+			create_date,
+			update_date,
+			op_id,
+			del_flag,
+			remark
+		) VALUES (
+			#{id},
+			#{area.id},
+			#{serial},
+			#{custNo},
+			#{name},
+			#{cardId},
+			#{address},
+			#{estateLicense},
+			#{issuingAuthority},
+			#{operatorName},
+			#{operatorCardId},
+			#{elecType},
+			#{capacity},
+			#{payType},
+			#{payWraping},
+			#{linkName},
+			#{linkTel},
+			#{checkStatus},
+			#{checkContent},
+			#{createBy.id},
+			#{createDate},
+			#{updateDate},
+			#{opId},
+			#{delFlag},
+			#{remark}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE com_resident_elec_apply SET 	
+			area_id = #{area.id},
+			serial = #{serial},
+			cust_no = #{custNo},
+			name = #{name},
+			card_id = #{cardId},
+			address = #{address},
+			estate_license = #{estateLicense},
+			issuing_authority = #{issuingAuthority},
+			operator_name = #{operatorName},
+			operator_card_id = #{operatorCardId},
+			elec_type = #{elecType},
+			capacity = #{capacity},
+			pay_type = #{payType},
+			pay_wraping = #{payWraping},
+			link_name = #{linkName},
+			link_tel = #{linkTel},
+			check_status = #{checkStatus},
+			check_content = #{checkContent},
+			update_date = #{updateDate},
+			op_id = #{opId},
+			remark = #{remark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE com_resident_elec_apply SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

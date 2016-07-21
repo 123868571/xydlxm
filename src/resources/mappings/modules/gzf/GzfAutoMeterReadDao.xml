@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfAutoMeterReadDao">
+    
+	<sql id="gzfAutoMeterReadColumns">
+		a.id AS "id",
+		a.meter_ip AS "meterIp",
+		a.meter_no AS "meterNo",
+		a.num AS "num",
+		a.time AS "time",
+		a.meter_type AS "meterType",
+		a.flag AS "flag",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="gzfAutoMeterReadJoins">
+	</sql>
+    
+	<select id="get" resultType="GzfAutoMeterRead">
+		SELECT 
+			<include refid="gzfAutoMeterReadColumns"/>
+		FROM gzf_auto_meter_read a
+		<include refid="gzfAutoMeterReadJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<sql id="Where">
+		<if test="meterType != null and meterType != ''">
+			and a.meter_type = #{meterType}
+		</if>
+	</sql>
+	
+	<select id="findList" resultType="GzfAutoMeterRead">
+		SELECT 
+			<include refid="gzfAutoMeterReadColumns"/>
+		FROM gzf_auto_meter_read a
+		<include refid="gzfAutoMeterReadJoins"/>
+		<where>
+			<include refid="Where"></include>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY time DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfAutoMeterRead">
+		SELECT 
+			<include refid="gzfAutoMeterReadColumns"/>
+		FROM gzf_auto_meter_read a
+		<include refid="gzfAutoMeterReadJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_auto_meter_read(
+			id,
+			meter_ip,
+			meter_no,
+			num,
+			time,
+			meter_type,
+			flag,
+			remarks
+		) VALUES (
+			#{id},
+			#{meterIp},
+			#{meterNo},
+			#{num},
+			#{time},
+			#{meterType},
+			#{flag},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_auto_meter_read SET 	
+			meter_ip = #{meterIp},
+			meter_no = #{meterNo},
+			num = #{num},
+			time = #{time},
+			meter_type = #{meterType},
+			flag = #{flag},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gzf_auto_meter_read
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

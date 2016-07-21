@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.paopao.hzgzf.modules.pay.dao.GzfSpecialPaymentMapper" >
+  <resultMap id="BaseResultMap" type="com.paopao.hzgzf.modules.pay.entity.GzfSpecialPayment" >
+    <id column="spe_payment_id" property="spePaymentId" jdbcType="INTEGER" />
+    <result column="spe_payment_desc" property="spePaymentDesc" jdbcType="VARCHAR" />
+    <result column="acct_item_type_id" property="acctItemTypeId" jdbcType="INTEGER" />
+    <result column="state" property="delFlag" jdbcType="CHAR" />
+    <result column="state_date" property="stateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    spe_payment_id, spe_payment_desc, acct_item_type_id, state, state_date
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfSpecialPaymentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from gzf_special_payment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gzf_special_payment
+    where spe_payment_id = #{spePaymentId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from gzf_special_payment
+    where spe_payment_id = #{spePaymentId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfSpecialPaymentExample" >
+    delete from gzf_special_payment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfSpecialPayment" >
+    insert into gzf_special_payment (spe_payment_id, spe_payment_desc, acct_item_type_id, 
+      state, state_date)
+    values (#{spePaymentId,jdbcType=INTEGER}, #{spePaymentDesc,jdbcType=VARCHAR}, #{acctItemTypeId,jdbcType=INTEGER}, 
+      #{delFlag,jdbcType=CHAR}, #{stateDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfSpecialPayment" >
+    insert into gzf_special_payment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="spePaymentId != null" >
+        spe_payment_id,
+      </if>
+      <if test="spePaymentDesc != null" >
+        spe_payment_desc,
+      </if>
+      <if test="acctItemTypeId != null" >
+        acct_item_type_id,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+      <if test="stateDate != null" >
+        state_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="spePaymentId != null" >
+        #{spePaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="spePaymentDesc != null" >
+        #{spePaymentDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="acctItemTypeId != null" >
+        #{acctItemTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="stateDate != null" >
+        #{stateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfSpecialPaymentExample" resultType="java.lang.Integer" >
+    select count(*) from gzf_special_payment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update gzf_special_payment
+    <set >
+      <if test="record.spePaymentId != null" >
+        spe_payment_id = #{record.spePaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.spePaymentDesc != null" >
+        spe_payment_desc = #{record.spePaymentDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.acctItemTypeId != null" >
+        acct_item_type_id = #{record.acctItemTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.delFlag != null" >
+        state = #{record.delFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.stateDate != null" >
+        state_date = #{record.stateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update gzf_special_payment
+    set spe_payment_id = #{record.spePaymentId,jdbcType=INTEGER},
+      spe_payment_desc = #{record.spePaymentDesc,jdbcType=VARCHAR},
+      acct_item_type_id = #{record.acctItemTypeId,jdbcType=INTEGER},
+      state = #{record.delFlag,jdbcType=CHAR},
+      state_date = #{record.stateDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfSpecialPayment" >
+    update gzf_special_payment
+    <set >
+      <if test="spePaymentDesc != null" >
+        spe_payment_desc = #{spePaymentDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="acctItemTypeId != null" >
+        acct_item_type_id = #{acctItemTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        state = #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="stateDate != null" >
+        state_date = #{stateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where spe_payment_id = #{spePaymentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfSpecialPayment" >
+    update gzf_special_payment
+    set spe_payment_desc = #{spePaymentDesc,jdbcType=VARCHAR},
+      acct_item_type_id = #{acctItemTypeId,jdbcType=INTEGER},
+      state = #{delFlag,jdbcType=CHAR},
+      state_date = #{stateDate,jdbcType=TIMESTAMP}
+    where spe_payment_id = #{spePaymentId,jdbcType=INTEGER}
+  </update>
+  
+   <select id="get" resultType="com.paopao.hzgzf.modules.pay.entity.GzfSpecialPayment">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_special_payment a
+		WHERE a.spe_payment_id = #{spe_payment_id}
+	</select>
+	
+	<select id="findList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfSpecialPayment">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_special_payment a
+		<where>
+			a.state = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.state_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfSpecialPayment">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_special_payment a
+		<where>
+			a.state = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.state_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="delete">
+		UPDATE gzf_special_payment SET 
+			state = #{DEL_FLAG_DELETE}
+		WHERE spe_payment_id = #{spe_payment_id}
+	</update>
+</mapper>

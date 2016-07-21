@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.common.ftp.dao.ComFtpDao">
+    
+	<sql id="comFtpColumns">
+		a.id AS "id",
+		a.ftp_code AS "ftpCode",
+		a.host_ip AS "hostIp",
+		a.user AS "user",
+		a.password AS "password",
+		a.port as "port",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.op_id AS "opId",
+		a.del_flag AS "delFlag",
+		a.remark AS "remark"
+	</sql>
+	
+	<sql id="comFtpJoins">
+	</sql>
+    
+	<select id="get" resultType="ComFtp">
+		SELECT 
+			<include refid="comFtpColumns"/>
+		FROM com_ftp a
+		<include refid="comFtpJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ComFtp">
+		SELECT 
+			<include refid="comFtpColumns"/>
+		FROM com_ftp a
+		<include refid="comFtpJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="ftpCode != null and ftpCode != ''">
+				AND a.ftp_code LIKE 
+					<if test="dbName == 'oracle'">'%'||#{ftpCode}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{ftpCode}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{ftpCode},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ComFtp">
+		SELECT 
+			<include refid="comFtpColumns"/>
+		FROM com_ftp a
+		<include refid="comFtpJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO com_ftp(
+			id,
+			ftp_code,
+			host_ip,
+			user,
+			password,
+			port,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			op_id,
+			del_flag,
+			remark
+		) VALUES (
+			#{id},
+			#{ftpCode},
+			#{hostIp},
+			#{user},
+			#{password},
+			#{port},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{opId},
+			#{delFlag},
+			#{remark}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE com_ftp SET 	
+			ftp_code = #{ftpCode},
+			host_ip = #{hostIp},
+			user = #{user},
+			password = #{password},
+			port = #{port},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			op_id = #{opId},
+			remark = #{remark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE com_ftp SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

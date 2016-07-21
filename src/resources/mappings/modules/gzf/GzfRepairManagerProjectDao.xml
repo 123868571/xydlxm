@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfRepairManagerProjectDao">
+    
+	<sql id="gzfRepairManagerProjectColumns">
+		a.id AS "id",
+		a.num AS "num",
+		a.gzf_repair_manager_id AS "gzfRepairManagerId",
+		a.gzf_repair_project_id AS "gzfRepairProjectId",
+		a.remarks AS "remarks",
+		b.name AS "gzfRepairProject.name"
+	</sql>
+	
+	<sql id="gzfRepairManagerProjectJoins">
+		left join gzf_repair_project b on b.id = a.gzf_repair_project_id
+	</sql>
+    
+	<select id="get" resultType="GzfRepairManagerProject">
+		SELECT 
+			<include refid="gzfRepairManagerProjectColumns"/>
+		FROM gzf_repair_manager_project a
+		<include refid="gzfRepairManagerProjectJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfRepairManagerProject">
+		SELECT 
+			<include refid="gzfRepairManagerProjectColumns"/>
+		FROM gzf_repair_manager_project a
+		<include refid="gzfRepairManagerProjectJoins"/>
+		<where>
+			<if test="gzfRepairManagerId != null and gzfRepairManagerId != ''">
+				AND a.gzf_repair_manager_id = #{gzfRepairManagerId}
+			</if>
+			<if test="gzfRepairProjectId != null and gzfRepairProjectId != ''">
+				AND a.gzf_repair_project_id = #{gzfRepairProjectId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfRepairManagerProject">
+		SELECT 
+			<include refid="gzfRepairManagerProjectColumns"/>
+		FROM gzf_repair_manager_project a
+		<include refid="gzfRepairManagerProjectJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_repair_manager_project(
+			id,
+			num,
+			gzf_repair_manager_id,
+			gzf_repair_project_id,
+			remarks
+		) VALUES (
+			#{id},
+			#{num},
+			#{gzfRepairManagerId},
+			#{gzfRepairProjectId},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_repair_manager_project SET 	
+			num = #{num},
+			gzf_repair_manager_id = #{gzfRepairManagerId},
+			gzf_repair_project_id = #{gzfRepairProjectId},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gzf_repair_manager_project
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false" name="defaultCache">
+
+    <diskStore path="../temp/hzgzf/ehcache"/>
+
+    <!-- 默认缓存配置. -->
+    <defaultCache maxEntriesLocalHeap="100" eternal="false"
+                  timeToIdleSeconds="300" timeToLiveSeconds="600" overflowToDisk="true"
+                  maxEntriesLocalDisk="100000"/>
+
+    <!-- 系统缓存 -->
+    <cache name="sysCache" maxEntriesLocalHeap="100" eternal="true"
+           overflowToDisk="true"/>
+
+    <!-- 用户缓存 -->
+    <cache name="userCache" maxEntriesLocalHeap="100" eternal="true"
+           overflowToDisk="true"/>
+
+    <!-- 系统活动会话缓存 -->
+    <cache name="activeSessionsCache" maxEntriesLocalHeap="10000"
+           overflowToDisk="true" eternal="true" timeToLiveSeconds="0"
+           timeToIdleSeconds="0" diskPersistent="true"
+           diskExpiryThreadIntervalSeconds="600"/>
+    <!-- 短信验证码缓存 -->
+    <cache name="smsCache" maxEntriesLocalHeap="10000"
+           overflowToDisk="true" eternal="false" timeToLiveSeconds="60"
+           timeToIdleSeconds="60" diskPersistent="true"
+           diskExpiryThreadIntervalSeconds="600"/>
+    <!-- 防止登录session -->
+    <cache name="sessionidCache" maxEntriesLocalHeap="10000"
+           overflowToDisk="true" eternal="true" timeToLiveSeconds="0"
+           timeToIdleSeconds="0" diskPersistent="true"
+           diskExpiryThreadIntervalSeconds="600"/>
+    <cache name="sessionidCoachCache" maxEntriesLocalHeap="10000"
+           overflowToDisk="true" eternal="true" timeToLiveSeconds="0"
+           timeToIdleSeconds="0" diskPersistent="true"
+           diskExpiryThreadIntervalSeconds="600"/>
+    <!-- geohashSession -->
+    <cache name="geohashCache" maxEntriesLocalHeap="10000"
+           overflowToDisk="true" eternal="true" timeToLiveSeconds="0"
+           timeToIdleSeconds="0" diskPersistent="true"
+           diskExpiryThreadIntervalSeconds="600"/>
+
+    <!-- 简单页面缓存 <cache name="SimplePageCachingFilter" maxEntriesLocalHeap="100"
+        eternal="false" overflowToDisk="true" timeToIdleSeconds="120" timeToLiveSeconds="120"
+        memoryStoreEvictionPolicy="LFU"/> -->
+
+
+    <cache name="reportCache" maxEntriesLocalHeap="10000"
+           overflowToDisk="true" eternal="true" timeToLiveSeconds="0"
+           timeToIdleSeconds="0" diskPersistent="true"/>
+
+</ehcache>

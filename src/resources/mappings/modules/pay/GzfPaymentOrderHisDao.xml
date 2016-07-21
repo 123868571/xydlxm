@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.pay.dao.GzfPaymentOrderHisDao">
+    
+	<sql id="gzfPaymentOrderHisColumns">
+		a.id AS "id",
+		a.account_balance_id AS "accountBalanceId",
+		a.account_id AS "accountId",
+		a.phone_no AS "phoneNo",
+		a.cust_id AS "custId",
+		a.opt_code AS "optCode",
+		a.external_seq AS "externalSeq",
+		a.pri_pay_log_id AS "priPayLogId",
+		a.bank_id AS "bankId",
+		a.payment_type AS "paymentType",
+		a.pay_method AS "payMethod",
+		a.certificate_type AS "certificateType",
+		a.certificate_code AS "certificateCode",
+		a.owe_fee AS "oweFee",
+		a.amount AS "amount",
+		a.balance_type_id AS "balanceTypeId",
+		a.spe_payment_id AS "spePaymentId",
+		a.effect_date AS "effectDate",
+		a.expire_date AS "expireDate",
+		a.create_by AS "createBy.id",
+		a.state AS "state",
+		a.create_date AS "createDate",
+		a.pay_date AS "payDate",
+		a.remarks AS "remarks",
+		a.photo AS "photo",
+		a.transfer_id AS "transferId",
+		a.channel_type AS "channelType",
+		a.process_status AS "processStatus",
+		a.process_date AS "processDate",
+		a.error_msg AS "errorMsg"
+	</sql>
+	
+	<sql id="gzfPaymentOrderHisJoins">
+	</sql>
+    
+	<select id="get" resultType="GzfPaymentOrderHis">
+		SELECT 
+			<include refid="gzfPaymentOrderHisColumns"/>
+		FROM gzf_payment_order_his a
+		<include refid="gzfPaymentOrderHisJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfPaymentOrderHis">
+		SELECT 
+			<include refid="gzfPaymentOrderHisColumns"/>
+		FROM gzf_payment_order_his a
+		<include refid="gzfPaymentOrderHisJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfPaymentOrderHis">
+		SELECT 
+			<include refid="gzfPaymentOrderHisColumns"/>
+		FROM gzf_payment_order_his a
+		<include refid="gzfPaymentOrderHisJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_payment_order_his(
+			id,
+			account_balance_id,
+			account_id,
+			phone_no,
+			cust_id,
+			opt_code,
+			external_seq,
+			pri_pay_log_id,
+			bank_id,
+			payment_type,
+			pay_method,
+			certificate_type,
+			certificate_code,
+			owe_fee,
+			amount,
+			balance_type_id,
+			spe_payment_id,
+			effect_date,
+			expire_date,
+			create_by,
+			state,
+			create_date,
+			pay_date,
+			remarks,
+			photo,
+			transfer_id,
+			channel_type,
+			process_status,
+			process_date,
+			error_msg
+		) VALUES (
+			#{id},
+			#{accountBalanceId},
+			#{accountId},
+			#{phoneNo},
+			#{custId},
+			#{optCode},
+			#{externalSeq},
+			#{priPayLogId},
+			#{bankId},
+			#{paymentType},
+			#{payMethod},
+			#{certificateType},
+			#{certificateCode},
+			#{oweFee},
+			#{amount},
+			#{balanceTypeId},
+			#{spePaymentId},
+			#{effectDate},
+			#{expireDate},
+			#{createBy.id},
+			#{state},
+			#{createDate},
+			#{payDate},
+			#{remarks},
+			#{photo},
+			#{transferId},
+			#{channelType},
+			#{processStatus},
+			#{processDate},
+			#{errorMsg}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_payment_order_his SET 	
+			account_balance_id = #{accountBalanceId},
+			account_id = #{accountId},
+			phone_no = #{phoneNo},
+			cust_id = #{custId},
+			opt_code = #{optCode},
+			external_seq = #{externalSeq},
+			pri_pay_log_id = #{priPayLogId},
+			bank_id = #{bankId},
+			payment_type = #{paymentType},
+			pay_method = #{payMethod},
+			certificate_type = #{certificateType},
+			certificate_code = #{certificateCode},
+			owe_fee = #{oweFee},
+			amount = #{amount},
+			balance_type_id = #{balanceTypeId},
+			spe_payment_id = #{spePaymentId},
+			effect_date = #{effectDate},
+			expire_date = #{expireDate},
+			state = #{state},
+			pay_date = #{payDate},
+			remarks = #{remarks},
+			photo = #{photo},
+			transfer_id = #{transferId},
+			channel_type = #{channelType},
+			process_status = #{processStatus},
+			process_date = #{processDate},
+			error_msg = #{errorMsg}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gzf_payment_order_his
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

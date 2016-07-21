@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfBuildingDao">
+    
+	<sql id="gzfBuildingColumns">
+		a.id AS "id",
+		a.gzf_village_id AS "gzfVillageId",
+		a.gzf_palaces_id AS "gzfPalacesId",
+		a.max_build_num AS "maxBuildNum",
+		a.max_unit_num AS "maxUnitNum",
+		a.max_floor_num AS "maxFloorNum",
+		a.max_room_num AS "maxRoomNum",
+		a.min_build_num AS "minBuildNum",
+		a.min_unit_num AS "minUnitNum",
+		a.min_floor_num AS "minFloorNum",
+		a.min_room_num AS "minRoomNum",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		b.name AS "gzfPalaces.name",
+		c.name AS "gzfVillage.name"
+	</sql>
+	
+	<sql id="gzfBuildingJoins">
+	left join gzf_palaces b on b.id = a.gzf_palaces_id
+	left join gzf_village c on c.id = a.gzf_village_id 
+	</sql>
+    
+	<select id="get" resultType="GzfBuilding">
+		SELECT 
+			<include refid="gzfBuildingColumns"/>
+		FROM gzf_building a
+		<include refid="gzfBuildingJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfBuilding">
+		SELECT 
+			<include refid="gzfBuildingColumns"/>
+		FROM gzf_building a
+		<include refid="gzfBuildingJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="gzfVillageId != null and gzfVillageId != ''">
+			AND a.gzf_village_id = #{gzfVillageId}
+			</if>
+			<if test="gzfVillages != null">
+				AND a.gzf_village_id IN
+				<foreach collection="gzfVillages" open="(" close=")" index="index" item="item" separator=",">
+					#{item,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+			<if test="gzfPalaceList != null">
+				AND a.gzf_palaces_id IN
+				<foreach collection="gzfPalaceList" open="(" close=")" index="index" item="item" separator=",">
+					#{item,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="GzfBuilding">
+		SELECT 
+			<include refid="gzfBuildingColumns"/>
+		FROM gzf_building a
+		<include refid="gzfBuildingJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_building(
+			id,
+			gzf_village_id,
+			gzf_palaces_id,
+			max_build_num,
+			max_unit_num,
+			max_floor_num,
+			max_room_num,
+			min_build_num,
+			min_unit_num,
+			min_floor_num,
+			min_room_num,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{gzfVillageId},
+			#{gzfPalacesId},
+			#{maxBuildNum},
+			#{maxUnitNum},
+			#{maxFloorNum},
+			#{maxRoomNum},
+			#{minBuildNum},
+			#{minUnitNum},
+			#{minFloorNum},
+			#{minRoomNum},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_building SET 	
+			gzf_village_id = #{gzfVillageId},
+			gzf_palaces_id = #{gzfPalacesId},
+			max_build_num = #{maxBuildNum},
+			max_unit_num = #{maxUnitNum},
+			max_floor_num = #{maxFloorNum},
+			max_room_num = #{maxRoomNum},
+			min_build_num = #{minBuildNum},
+			min_unit_num = #{minUnitNum},
+			min_floor_num = #{minFloorNum},
+			min_room_num = #{minRoomNum},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gzf_building SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

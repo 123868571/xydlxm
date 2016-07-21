@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.paopao.hzgzf.modules.pay.dao.GzfBalanceTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.paopao.hzgzf.modules.pay.entity.GzfBalanceType" >
+    <id column="balance_type_id" property="balanceTypeId" jdbcType="INTEGER" />
+    <result column="balance_type_name" property="balanceTypeName" jdbcType="VARCHAR" />
+    <result column="allow_draw" property="allowDraw" jdbcType="CHAR" />
+    <result column="allow_writeoff" property="allowWriteoff" jdbcType="CHAR" />
+    <result column="invoice_offer" property="invoiceOffer" jdbcType="CHAR" />
+    <result column="pri" property="pri" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="state_date" property="stateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    balance_type_id, balance_type_name, allow_draw, allow_writeoff, invoice_offer, pri, 
+    del_flag, state_date
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfBalanceTypeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from gzf_balance_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gzf_balance_type
+    where balance_type_id = #{balanceTypeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from gzf_balance_type
+    where balance_type_id = #{balanceTypeId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfBalanceTypeExample" >
+    delete from gzf_balance_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfBalanceType" >
+    insert into gzf_balance_type (balance_type_id, balance_type_name, allow_draw, 
+      allow_writeoff, invoice_offer, pri, 
+      del_flag, state_date)
+    values (#{balanceTypeId,jdbcType=INTEGER}, #{balanceTypeName,jdbcType=VARCHAR}, #{allowDraw,jdbcType=CHAR}, 
+      #{allowWriteoff,jdbcType=CHAR}, #{invoiceOffer,jdbcType=CHAR}, #{pri,jdbcType=INTEGER}, 
+      #{delFlag,jdbcType=CHAR}, #{stateDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfBalanceType" >
+    insert into gzf_balance_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="balanceTypeId != null" >
+        balance_type_id,
+      </if>
+      <if test="balanceTypeName != null" >
+        balance_type_name,
+      </if>
+      <if test="allowDraw != null" >
+        allow_draw,
+      </if>
+      <if test="allowWriteoff != null" >
+        allow_writeoff,
+      </if>
+      <if test="invoiceOffer != null" >
+        invoice_offer,
+      </if>
+      <if test="pri != null" >
+        pri,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+      <if test="stateDate != null" >
+        state_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="balanceTypeId != null" >
+        #{balanceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="balanceTypeName != null" >
+        #{balanceTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="allowDraw != null" >
+        #{allowDraw,jdbcType=CHAR},
+      </if>
+      <if test="allowWriteoff != null" >
+        #{allowWriteoff,jdbcType=CHAR},
+      </if>
+      <if test="invoiceOffer != null" >
+        #{invoiceOffer,jdbcType=CHAR},
+      </if>
+      <if test="pri != null" >
+        #{pri,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="stateDate != null" >
+        #{stateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfBalanceTypeExample" resultType="java.lang.Integer" >
+    select count(*) from gzf_balance_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update gzf_balance_type
+    <set >
+      <if test="record.balanceTypeId != null" >
+        balance_type_id = #{record.balanceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.balanceTypeName != null" >
+        balance_type_name = #{record.balanceTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.allowDraw != null" >
+        allow_draw = #{record.allowDraw,jdbcType=CHAR},
+      </if>
+      <if test="record.allowWriteoff != null" >
+        allow_writeoff = #{record.allowWriteoff,jdbcType=CHAR},
+      </if>
+      <if test="record.invoiceOffer != null" >
+        invoice_offer = #{record.invoiceOffer,jdbcType=CHAR},
+      </if>
+      <if test="record.pri != null" >
+        pri = #{record.pri,jdbcType=INTEGER},
+      </if>
+      <if test="record.delFlag != null" >
+        del_flag = #{record.delFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.stateDate != null" >
+        state_date = #{record.stateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update gzf_balance_type
+    set balance_type_id = #{record.balanceTypeId,jdbcType=INTEGER},
+      balance_type_name = #{record.balanceTypeName,jdbcType=VARCHAR},
+      allow_draw = #{record.allowDraw,jdbcType=CHAR},
+      allow_writeoff = #{record.allowWriteoff,jdbcType=CHAR},
+      invoice_offer = #{record.invoiceOffer,jdbcType=CHAR},
+      pri = #{record.pri,jdbcType=INTEGER},
+      del_flag = #{record.delFlag,jdbcType=CHAR},
+      state_date = #{record.stateDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfBalanceType" >
+    update gzf_balance_type
+    <set >
+      <if test="balanceTypeName != null" >
+        balance_type_name = #{balanceTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="allowDraw != null" >
+        allow_draw = #{allowDraw,jdbcType=CHAR},
+      </if>
+      <if test="allowWriteoff != null" >
+        allow_writeoff = #{allowWriteoff,jdbcType=CHAR},
+      </if>
+      <if test="invoiceOffer != null" >
+        invoice_offer = #{invoiceOffer,jdbcType=CHAR},
+      </if>
+      <if test="pri != null" >
+        pri = #{pri,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="stateDate != null" >
+        state_date = #{stateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where balance_type_id = #{balanceTypeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfBalanceType" >
+    update gzf_balance_type
+    set balance_type_name = #{balanceTypeName,jdbcType=VARCHAR},
+      allow_draw = #{allowDraw,jdbcType=CHAR},
+      allow_writeoff = #{allowWriteoff,jdbcType=CHAR},
+      invoice_offer = #{invoiceOffer,jdbcType=CHAR},
+      pri = #{pri,jdbcType=INTEGER},
+      del_flag = #{delFlag,jdbcType=CHAR},
+      state_date = #{stateDate,jdbcType=TIMESTAMP}
+    where balance_type_id = #{balanceTypeId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="get" resultType="com.paopao.hzgzf.modules.pay.entity.GzfBalanceType">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_balance_type a
+		WHERE a.balance_type_id = #{balance_type_id}
+	</select>
+	
+	<select id="findList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfBalanceType">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_balance_type a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.balance_type_id DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfBalanceType">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_balance_type a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.balance_type_id DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="delete">
+		UPDATE gzf_balance_type SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE balance_type_id = #{balance_type_id}
+	</update>
+</mapper>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.dlj.dao.ComWorkorderDao">
+    
+	<sql id="comWorkorderColumns">
+		a.id AS "id",
+		a.staffids AS "staffids",
+		a.gpsids AS "gpsids",
+		a.code AS "code",
+		a.wotype AS "wotype",
+		a.ordercontent AS "ordercontent",
+		a.orderwarning AS "orderwarning",
+		a.startdate AS "startdate",
+		a.starttime AS "starttime",
+		a.enddate AS "enddate",
+		a.endtime AS "endtime",
+		a.remarks AS "remarks",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="comWorkorderJoins">
+		JOIN sys_user u ON a.create_by=u.id
+		JOIN sys_office c ON u.office_id=c.id 
+	</sql>
+    
+	<select id="get" resultType="ComWorkorder">
+		SELECT 
+			<include refid="comWorkorderColumns"/>
+		FROM com_workorder a
+		<include refid="comWorkorderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ComWorkorder">
+		SELECT 
+			<include refid="comWorkorderColumns"/>
+		FROM com_workorder a
+		<include refid="comWorkorderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="code!=null and code!=''">
+				AND a.code = #{code}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ComWorkorder">
+		SELECT 
+			<include refid="comWorkorderColumns"/>
+		FROM com_workorder a
+		<include refid="comWorkorderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO com_workorder(
+			id,
+			staffids,
+			gpsids,
+			code,
+			wotype,
+			ordercontent,
+			orderwarning,
+			startdate,
+			starttime,
+			enddate,
+			endtime,
+			remarks,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{staffids},
+			#{gpsids},
+			#{code},
+			#{wotype},
+			#{ordercontent},
+			#{orderwarning},
+			#{startdate},
+			#{starttime},
+			#{enddate},
+			#{endtime},
+			#{remarks},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE com_workorder SET 	
+			staffids = #{staffids},
+			gpsids = #{gpsids},
+			code = #{code},
+			wotype = #{wotype},
+			ordercontent = #{ordercontent},
+			orderwarning = #{orderwarning},
+			startdate = #{startdate},
+			starttime = #{starttime},
+			enddate = #{enddate},
+			endtime = #{endtime},
+			remarks = #{remarks},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE com_workorder SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

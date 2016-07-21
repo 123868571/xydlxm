@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfInspectionDetailRelationDao">
+    
+	<sql id="gzfInspectionDetailRelationColumns">
+		a.id AS "id",
+		a.gzf_inspection_id AS "gzfInspectionId",
+		a.gzf_inspection_detail_id AS "gzfInspectionDetailId"
+	</sql>
+	
+	<sql id="gzfInspectionDetailRelationJoins">
+	</sql>
+    
+	<select id="get" resultType="GzfInspectionDetailRelation">
+		SELECT 
+			<include refid="gzfInspectionDetailRelationColumns"/>
+		FROM gzf_inspection_detail_relation a
+		<include refid="gzfInspectionDetailRelationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfInspectionDetailRelation">
+		SELECT 
+			<include refid="gzfInspectionDetailRelationColumns"/>
+		FROM gzf_inspection_detail_relation a
+		<include refid="gzfInspectionDetailRelationJoins"/>
+		<where>
+			<if test="gzfInspectionId != null and gzfInspectionId != ''">
+				AND a.gzf_inspection_id = #{gzfInspectionId} 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfInspectionDetailRelation">
+		SELECT 
+			<include refid="gzfInspectionDetailRelationColumns"/>
+		FROM gzf_inspection_detail_relation a
+		<include refid="gzfInspectionDetailRelationJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_inspection_detail_relation(
+			id,
+			gzf_inspection_id,
+			gzf_inspection_detail_id
+		) VALUES (
+			#{id},
+			#{gzfInspectionId},
+			#{gzfInspectionDetailId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_inspection_detail_relation SET 	
+			gzf_inspection_id = #{gzfInspectionId},
+			gzf_inspection_detail_id = #{gzfInspectionDetailId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gzf_inspection_detail_relation
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

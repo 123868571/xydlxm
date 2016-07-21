@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfRemindDao">
+    
+	<sql id="gzfRemindColumns">
+		a.id AS "id",
+		a.gzf_household_info_id AS "gzfHouseholdInfoId",
+		a.gzf_hous_info_id AS "gzfHousInfoId",
+		a.remindtype AS "remindtype",
+		a.time AS "time"
+	</sql>
+	
+	<sql id="gzfRemindJoins">
+	left join gzf_household_info h on h.id = a.gzf_household_info_id
+	left join gzf_house_info i on i.id = a.gzf_hous_info_id
+	</sql>
+    
+	<select id="get" resultType="GzfRemind">
+		SELECT 
+			<include refid="gzfRemindColumns"/>
+		FROM gzf_remind a
+		<include refid="gzfRemindJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfRemind">
+		SELECT 
+			<include refid="gzfRemindColumns"/>
+		FROM gzf_remind a
+		<include refid="gzfRemindJoins"/>
+		<where>
+			
+			<if test="gzfHousInfoId != null and gzfHousInfoId != ''">
+				AND a.gzf_hous_info_id = #{gzfHousInfoId}
+			</if>
+			<if test="remindtype != null and remindtype != ''">
+				AND a.remindtype = #{remindtype}
+			</if>
+			<if test="allSelect != null and allSelect != ''">
+				AND concat(h.name,h.phone) like "%${allSelect}%"
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfRemind">
+		SELECT 
+			<include refid="gzfRemindColumns"/>
+		FROM gzf_remind a
+		<include refid="gzfRemindJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_remind(
+			id,
+			gzf_household_info_id,
+			gzf_hous_info_id,
+			remindtype,
+			time
+		) VALUES (
+			#{id},
+			#{gzfHouseholdInfoId},
+			#{gzfHousInfoId},
+			#{remindtype},
+			#{time}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_remind SET 	
+			gzf_household_info_id = #{gzfHouseholdInfoId},
+			gzf_hous_info_id = #{gzfHousInfoId},
+			remindtype = #{remindtype},
+			time = #{time}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gzf_remind
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

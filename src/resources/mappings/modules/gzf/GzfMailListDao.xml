@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfMailListDao">
+    
+	<sql id="gzfMailListColumns">
+		a.id AS "id",
+		a.gzf_village_id AS "gzfVillageId",
+		a.mail_name AS "mailName",
+		a.manufactor AS "manufactor",
+		a.name AS "name",
+		a.phone AS "phone",
+		a.remarks AS "remarks",
+		v.name AS "gzfVillage.name"
+	</sql>
+	
+	<sql id="gzfMailListJoins">
+	left join gzf_village v on v.id = a.gzf_village_id
+	</sql>
+    
+	<select id="get" resultType="GzfMailList">
+		SELECT 
+			<include refid="gzfMailListColumns"/>
+		FROM gzf_mail_list a
+		<include refid="gzfMailListJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfMailList">
+		SELECT 
+			<include refid="gzfMailListColumns"/>
+		FROM gzf_mail_list a
+		<include refid="gzfMailListJoins"/>
+		<where>
+			
+			<if test="gzfVillageId != null and gzfVillageId != ''">
+				AND a.gzf_village_id = #{gzfVillageId}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfMailList">
+		SELECT 
+			<include refid="gzfMailListColumns"/>
+		FROM gzf_mail_list a
+		<include refid="gzfMailListJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_mail_list(
+			id,
+			gzf_village_id,
+			mail_name,
+			manufactor,
+			name,
+			phone,
+			remarks
+		) VALUES (
+			#{id},
+			#{gzfVillageId},
+			#{mailName},
+			#{manufactor},
+			#{name},
+			#{phone},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_mail_list SET 	
+			gzf_village_id = #{gzfVillageId},
+			mail_name = #{mailName},
+			manufactor = #{manufactor},
+			name = #{name},
+			phone = #{phone},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gzf_mail_list
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

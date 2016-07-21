@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfHouseApplyFormDao">
+	<resultMap type="GzfHouseApplyForm" id="result_bean">
+		<result property="createBy.id" column="create_by" />
+		<result property="updateBy.id" column="update_by" />
+	</resultMap>
+
+	<select id="get" resultMap="result_bean">
+		SELECT * FROM `gzf_house_apply_form`
+		WHERE `id` = #{id}
+	</select>
+
+	<select id="findList" resultMap="result_bean">
+		SELECT * FROM `gzf_house_apply_form`
+		<where>
+			<if test="serial!=null and serial!=''">
+				AND `serial` = #{serial}
+			</if>
+			<if test="applyMajorName!=null and applyMajorName!=''">
+				AND `apply_major_name` = #{applyMajorName}
+			</if>
+			<if test="applyMajorIdcard!=null and applyMajorIdcard!=''">
+				AND `apply_major_idcard` = #{applyMajorIdcard}
+			</if>
+			<if test="applyMajorPhone!=null and applyMajorPhone!=''">
+				AND `apply_major_phone` = #{applyMajorPhone}
+			</if>
+			<if test="DEL_FLAG_NORMAL>-1">
+				AND `del_flag` = #{DEL_FLAG_NORMAL}
+			</if>
+		</where>
+		ORDER BY `create_date` DESC
+	</select>
+
+	<select id="findAllList" resultMap="result_bean">
+		SELECT * FROM `gzf_house_apply_form`
+		<where>
+			`del_flag` = #{DEL_FLAG_NORMAL}
+		</where>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO `gzf_house_apply_form`(
+		`id`,
+		`serial`,
+		`apply_type`,
+		`apply_major_name`,
+		`apply_major_phone`,
+		`apply_major_idcard`,
+		`apply_major_marital_status`,
+		`apply_major_photo_front`,
+		`apply_major_photo_back`,
+		`apply_major_area_id`,
+		`apply_major_community`,
+		`form_type`,
+		`form_content`,
+		`check_status`,
+		`check_verify`,
+		`check_content`,
+		`create_by`,
+		`create_date`,
+		`update_by`,
+		`update_date`,
+		`remarks`,
+		`del_flag`
+		) VALUES (
+		#{id},
+		#{serial},
+		#{applyType},
+		#{applyMajorName},
+		#{applyMajorPhone},
+		#{applyMajorIdcard},
+		#{applyMajorMaritalStatus},
+		#{applyMajorPhotoFront},
+		#{applyMajorPhotoBack},
+		#{applyMajorAreaId},
+		#{applyMajorCommunity},
+		#{formType},
+		#{formContent},
+		#{checkStatus},
+		#{checkVerify},
+		#{checkContent},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{remarks},
+		#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE `gzf_house_apply_form`
+		<set>
+			<if test="applyType>-1">
+				`apply_type` = #{applyType},
+			</if>
+			<if test="applyMajorIdcard!=null and applyMajorIdcard!=''">
+				`apply_major_idcard` = #{applyMajorIdcard},
+			</if>
+			<if test="applyMajorIncome!=null and applyMajorIncome!=''">
+				`apply_major_income` = #{applyMajorIncome},
+			</if>
+			<if test="applyMajorMaritalStatus>-1">
+				`apply_major_marital_status` = #{applyMajorMaritalStatus},
+			</if>
+			<if test="applyMajorName!=null and applyMajorName!=''">
+				`apply_major_name` = #{applyMajorName},
+			</if>
+			<if test="applyMajorPhone!=null and applyMajorPhone!=''">
+				`apply_major_phone` = #{applyMajorPhone},
+			</if>
+			<if test="applyMajorPhotoFront!=null and applyMajorPhotoFront!=''">
+				`apply_major_photo_front` = #{applyMajorPhotoFront},
+			</if>
+			<if test="applyMajorPhotoBack!=null and applyMajorPhotoBack!=''">
+				`apply_major_photo_back` = #{applyMajorPhotoBack},
+			</if>
+			<if test="applyMajorAreaId!=null and applyMajorAreaId!=''">
+				`apply_major_area_id` = #{applyMajorAreaId},
+			</if>
+			<if test="applyMajorCommunity!=null and applyMajorCommunity!=''">
+				`apply_major_community` = #{applyMajorCommunity},
+			</if>
+			<if test="formContent!=null and formContent!=''">
+				`form_content` = #{formContent},
+			</if>
+			`update_by` = #{updateBy.id},
+			`update_date` = #{updateDate},
+			`remarks` = #{remarks}
+		</set>
+		<where>
+			`id` = #{id}
+		</where>
+	</update>
+
+	<update id="updateCheck">
+		UPDATE `gzf_house_apply_form`
+		<set>
+			<if test="checkStatus>0">
+				`check_status` = #{checkStatus},
+			</if>
+			<if test="checkVerify > -1">
+				`check_verify` = #{checkVerify},
+			</if>
+			<if test="checkContent!=null and checkContent!=''">
+				`check_content` = #{checkContent},
+			</if>
+			`update_by` = #{updateBy.id},
+			`update_date` = #{updateDate},
+			`remarks` = #{remarks}
+		</set>
+		<where>
+			`id` = #{id}
+		</where>
+	</update>
+
+	<update id="delete">
+		UPDATE `gzf_house_apply_form` SET
+		`del_flag` = #{DEL_FLAG_DELETE}
+		<where>
+			`id` = #{id}
+		</where>
+	</update>
+
+</mapper>

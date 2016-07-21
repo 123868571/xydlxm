@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfQuotaDao">
+    
+	<sql id="gzfQuotaColumns">
+		a.id AS "id",
+		a.gzf_village_id AS "gzfVillageId",
+		a.gzf_palaces_id AS "gzfPalacesId",
+		a.max_rent AS "maxRent",
+		a.max_water AS "maxWater",
+		a.max_elec AS "maxElec",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		b.name AS "gzfPalaces.name",
+		c.name AS "gzfVillage.name"
+	</sql>
+	
+	<sql id="gzfQuotaJoins">
+	left join gzf_palaces b on b.id = a.gzf_palaces_id
+	left join gzf_village c on c.id = a.gzf_village_id 
+	</sql>
+    
+	<select id="get" resultType="GzfQuota">
+		SELECT 
+			<include refid="gzfQuotaColumns"/>
+		FROM gzf_quota a
+		<include refid="gzfQuotaJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfQuota">
+		SELECT 
+			<include refid="gzfQuotaColumns"/>
+		FROM gzf_quota a
+		<include refid="gzfQuotaJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="maxRent != null and maxRent != ''">
+				AND a.max_rent = #{maxRent}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfQuota">
+		SELECT 
+			<include refid="gzfQuotaColumns"/>
+		FROM gzf_quota a
+		<include refid="gzfQuotaJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_quota(
+			id,
+			gzf_village_id,
+			gzf_palaces_id,
+			max_rent,
+			max_water,
+			max_elec,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{gzfVillageId},
+			#{gzfPalacesId},
+			#{maxRent},
+			#{maxWater},
+			#{maxElec},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_quota SET 	
+			gzf_village_id = #{gzfVillageId},
+			gzf_palaces_id = #{gzfPalacesId},
+			max_rent = #{maxRent},
+			max_water = #{maxWater},
+			max_elec = #{maxElec},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gzf_quota SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

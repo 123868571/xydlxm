@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfMaintenanceLogDao">
+    
+	<sql id="gzfMaintenanceLogColumns">
+		a.id AS "id",
+		a.time AS "time",
+		a.type AS "type",
+		a.content AS "content",
+		a.name AS "name",
+		b.name AS "gzfFaultCategory.name"
+	</sql>
+	
+	<sql id="gzfMaintenanceLogJoins">
+		left join gzf_fault_category b on b.id = a.type
+	</sql>
+    
+	<select id="get" resultType="GzfMaintenanceLog">
+		SELECT 
+			<include refid="gzfMaintenanceLogColumns"/>
+		FROM gzf_maintenance_log a
+		<include refid="gzfMaintenanceLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfMaintenanceLog">
+		SELECT 
+			<include refid="gzfMaintenanceLogColumns"/>
+		FROM gzf_maintenance_log a
+		<include refid="gzfMaintenanceLogJoins"/>
+		<where>
+			
+			<if test="time != null and time != ''">
+				AND a.time = #{time}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfMaintenanceLog">
+		SELECT 
+			<include refid="gzfMaintenanceLogColumns"/>
+		FROM gzf_maintenance_log a
+		<include refid="gzfMaintenanceLogJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_maintenance_log(
+			id,
+			time,
+			type,
+			content,
+			name
+		) VALUES (
+			#{id},
+			#{time},
+			#{type},
+			#{content},
+			#{name}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_maintenance_log SET 	
+			time = #{time},
+			type = #{type},
+			content = #{content},
+			name = #{name}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gzf_maintenance_log
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

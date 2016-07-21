@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.paopao.hzgzf.modules.pay.dao.GzfAccountBalanceMapper" >
+  <resultMap id="BaseResultMap" type="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="account_id" property="accountId" jdbcType="VARCHAR" />
+    <result column="balance_type_id" property="balanceTypeId" jdbcType="INTEGER" />
+    <result column="spe_payment_id" property="spePaymentId" jdbcType="INTEGER" />
+    <result column="acct_item_type_id" property="acctItemTypeId" jdbcType="INTEGER" />
+    <result column="init_balance" property="initBalance" jdbcType="INTEGER" />
+    <result column="balance" property="balance" jdbcType="INTEGER" />
+    <result column="effect_date" property="effectDate" jdbcType="TIMESTAMP" />
+    <result column="expire_date" property="expireDate" jdbcType="TIMESTAMP" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy.id" jdbcType="VARCHAR" />
+    <result column="update_by" property="updateBy.id" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="payment_id" property="paymentId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, account_id, balance_type_id, spe_payment_id, acct_item_type_id, init_balance, 
+    balance, effect_date, expire_date, state, update_date, create_date, create_by, update_by, 
+    del_flag, remarks, payment_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalanceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from gzf_account_balance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from gzf_account_balance
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from gzf_account_balance
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalanceExample" >
+    delete from gzf_account_balance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance" >
+    insert into gzf_account_balance (id, account_id, balance_type_id, 
+      spe_payment_id, acct_item_type_id, init_balance, 
+      balance, effect_date, expire_date, 
+      state, update_date, create_date, 
+      create_by, update_by, del_flag, 
+      remarks, payment_id)
+    values (#{id,jdbcType=VARCHAR}, #{accountId,jdbcType=VARCHAR}, #{balanceTypeId,jdbcType=INTEGER}, 
+      #{spePaymentId,jdbcType=INTEGER}, #{acctItemTypeId,jdbcType=INTEGER}, #{initBalance,jdbcType=INTEGER}, 
+      #{balance,jdbcType=INTEGER}, #{effectDate,jdbcType=TIMESTAMP}, #{expireDate,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=CHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{createBy.id,jdbcType=VARCHAR}, #{updateBy.id,jdbcType=VARCHAR}, #{delFlag,jdbcType=CHAR}, 
+      #{remarks,jdbcType=VARCHAR}, #{paymentId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance" >
+    insert into gzf_account_balance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="accountId != null" >
+        account_id,
+      </if>
+      <if test="balanceTypeId != null" >
+        balance_type_id,
+      </if>
+      <if test="spePaymentId != null" >
+        spe_payment_id,
+      </if>
+      <if test="acctItemTypeId != null" >
+        acct_item_type_id,
+      </if>
+      <if test="initBalance != null" >
+        init_balance,
+      </if>
+      <if test="balance != null" >
+        balance,
+      </if>
+      <if test="effectDate != null" >
+        effect_date,
+      </if>
+      <if test="expireDate != null" >
+        expire_date,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="createBy.id != null" >
+        create_by,
+      </if>
+      <if test="updateBy.id != null" >
+        update_by,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="paymentId != null" >
+        payment_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null" >
+        #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceTypeId != null" >
+        #{balanceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="spePaymentId != null" >
+        #{spePaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="acctItemTypeId != null" >
+        #{acctItemTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="initBalance != null" >
+        #{initBalance,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=INTEGER},
+      </if>
+      <if test="effectDate != null" >
+        #{effectDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expireDate != null" >
+        #{expireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy.id != null" >
+        #{createBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy.id != null" >
+        #{updateBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentId != null" >
+        #{paymentId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalanceExample" resultType="java.lang.Integer" >
+    select count(*) from gzf_account_balance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update gzf_account_balance
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountId != null" >
+        account_id = #{record.accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.balanceTypeId != null" >
+        balance_type_id = #{record.balanceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.spePaymentId != null" >
+        spe_payment_id = #{record.spePaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.acctItemTypeId != null" >
+        acct_item_type_id = #{record.acctItemTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.initBalance != null" >
+        init_balance = #{record.initBalance,jdbcType=INTEGER},
+      </if>
+      <if test="record.balance != null" >
+        balance = #{record.balance,jdbcType=INTEGER},
+      </if>
+      <if test="record.effectDate != null" >
+        effect_date = #{record.effectDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.expireDate != null" >
+        expire_date = #{record.expireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state,jdbcType=CHAR},
+      </if>
+      <if test="record.updateDate != null" >
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null and record.updateBy.id != null" >
+        update_by = #{record.updateBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlag != null" >
+        del_flag = #{record.delFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentId != null" >
+        payment_id = #{record.paymentId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update gzf_account_balance
+    set id = #{record.id,jdbcType=VARCHAR},
+      account_id = #{record.accountId,jdbcType=VARCHAR},
+      balance_type_id = #{record.balanceTypeId,jdbcType=INTEGER},
+      spe_payment_id = #{record.spePaymentId,jdbcType=INTEGER},
+      acct_item_type_id = #{record.acctItemTypeId,jdbcType=INTEGER},
+      init_balance = #{record.initBalance,jdbcType=INTEGER},
+      balance = #{record.balance,jdbcType=INTEGER},
+      effect_date = #{record.effectDate,jdbcType=TIMESTAMP},
+      expire_date = #{record.expireDate,jdbcType=TIMESTAMP},
+      state = #{record.state,jdbcType=CHAR},
+      update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy.id,jdbcType=VARCHAR},
+      del_flag = #{record.delFlag,jdbcType=CHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR},
+      payment_id = #{record.paymentId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance" >
+    update gzf_account_balance
+    <set >
+      <if test="accountId != null" >
+        account_id = #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="balanceTypeId != null" >
+        balance_type_id = #{balanceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="spePaymentId != null" >
+        spe_payment_id = #{spePaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="acctItemTypeId != null" >
+        acct_item_type_id = #{acctItemTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="initBalance != null" >
+        init_balance = #{initBalance,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null" >
+        balance = #{balance,jdbcType=INTEGER},
+      </if>
+      <if test="effectDate != null" >
+        effect_date = #{effectDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expireDate != null" >
+        expire_date = #{expireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null and updateBy.id != null" >
+        update_by = #{updateBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentId != null" >
+        payment_id = #{paymentId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance" >
+    update gzf_account_balance
+    set account_id = #{accountId,jdbcType=VARCHAR},
+      balance_type_id = #{balanceTypeId,jdbcType=INTEGER},
+      spe_payment_id = #{spePaymentId,jdbcType=INTEGER},
+      acct_item_type_id = #{acctItemTypeId,jdbcType=INTEGER},
+      init_balance = #{initBalance,jdbcType=INTEGER},
+      balance = #{balance,jdbcType=INTEGER},
+      effect_date = #{effectDate,jdbcType=TIMESTAMP},
+      expire_date = #{expireDate,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=CHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      update_by = #{updateBy.id,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=CHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      payment_id = #{paymentId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+   <select id="get" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_account_balance a
+		WHERE a.id = #{id}
+	</select>
+	
+	<sql id="Where">
+		<where>
+			del_flag = #{DEL_FLAG_NORMAL}
+			<if test="accountId != null and accountId != ''">
+				and account_id = #{accountId}
+			</if>
+			<if test="balanceTypeId != null">
+				and balance_type_id = #{balanceTypeId}
+			</if>
+			<if test="spePaymentId != null">
+				and spe_payment_id = #{spePaymentId}
+			</if>
+			<if test="acctItemTypeId != null">
+				and acct_item_type_id = #{acctItemTypeId}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="findList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_account_balance a
+		<include refid="Where"></include>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_account_balance a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="delete">
+		UPDATE gzf_account_balance SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getBalancesByAccountId" parameterType="java.lang.String" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_account_balance a where a.del_flag = #{DEL_FLAG_NORMAL} and a.account_id=#{account_id}
+	</select>
+	
+	<select id="getGroupedBalanceByAccountId" parameterType="java.lang.String" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance">
+		SELECT SUM(balance) AS balance ,account_id,acct_item_type_id,spe_payment_id 
+		FROM gzf_account_balance t WHERE account_id=#{accountId} GROUP BY spe_payment_id
+	</select>
+	
+	<select id="getSumBalanceByAcctIdAndSpecId" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance">
+		SELECT SUM(balance) AS balance ,account_id,acct_item_type_id,spe_payment_id 
+		FROM gzf_account_balance t WHERE account_id=#{accountId} and spe_payment_id=#{spePaymentId}
+	</select>
+	
+	<select id="getSumBalanceByAcctIdAndAcctItemTypeId" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance">
+		SELECT SUM(balance) AS balance ,account_id,acct_item_type_id,spe_payment_id 
+		FROM gzf_account_balance t WHERE account_id=#{accountId} and acct_item_type_id=#{acctItemTypeId}
+	</select>
+</mapper>

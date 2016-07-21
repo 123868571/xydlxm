@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfHouseInfoDao">
+    
+	<sql id="gzfHouseInfoColumns">
+		a.id AS "id",
+		a.gzf_palaces_id AS "gzfPalacesId",
+		a.build_num AS "buildNum",
+		a.unit AS "unit",
+		a.room AS "room",
+		a.inner_area AS "innerArea",
+		a.use_area AS "useArea",
+		a.house_type AS "houseType",
+		a.house_stat AS "houseStat",
+		a.photo AS "photo",
+		a.gzf_house_property_id AS "gzfHousePropertyId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.code AS "code",
+		a.del_flag AS "delFlag",
+		a.water AS "water",
+		a.water_ip AS "waterIp",
+		a.elec AS "elec",
+		a.sync AS "sync",
+		a.elec_ip AS "elecIp",
+		a.elec_status AS "elecStatus",
+		a.water_status AS "waterStatus",
+		a.next_step AS "nextStep",
+		a.personal AS "personal",
+		b.name AS "gzfPalaces.name",
+		v.name AS "gzfPalaces.gzfVillage.name",
+		p.name AS "gzfHouseProperty.name",
+		i.cardNum AS "cardNum"
+	</sql>
+	
+	<sql id="gzfHouseInfoJoins">
+		left join gzf_palaces b on b.id = a.gzf_palaces_id
+		left join gzf_village v on v.id = b.gzf_village_id
+		left join gzf_house_property p on p.id = a.gzf_house_property_id
+		left join (select * from gzf_house_person where del_flag =0) c on c.gzf_house_info_id = a.id
+		left join gzf_household_info i on c.gzf_household_info_id = i.id
+	</sql>
+    
+	<select id="get" resultType="GzfHouseInfo">
+		SELECT 
+			<include refid="gzfHouseInfoColumns"/>
+		FROM gzf_house_info a
+		<include refid="gzfHouseInfoJoins"/>
+		WHERE a.del_flag = 0 and a.id = #{id}
+	</select>
+	
+	<select id="getByHouseInfo" resultType="GzfHouseInfo">
+		SELECT 
+			<include refid="gzfHouseInfoColumns"/>
+		FROM gzf_house_info a
+		<include refid="gzfHouseInfoJoins"/>
+		<where>
+			a.del_flag = 0
+			<if test="gzfPalacesId != null and gzfPalacesId != ''">
+				AND a.gzf_palaces_id = #{gzfPalacesId}
+			</if>
+			<if test="buildNum != null and buildNum != ''">
+				And a.build_Num = #{buildNum}
+			</if>
+			<if test="unit != null and unit != ''">
+				And a.unit = #{unit}
+			</if>
+			<if test="room != null and room != ''">
+				And a.room = #{room}
+			</if>
+		</where>
+	</select>
+	
+	<select id="countHouse" resultType="Integer">
+	    SELECT 
+		  COUNT(0) 
+		FROM
+		  gzf_house_info a 
+		  LEFT JOIN  (SELECT * FROM gzf_house_person WHERE del_flag = 0 ) p  on
+	    a.id = p.gzf_house_info_id
+	    WHERE a.personal = #{personal} and a.next_Step != 1  and p.id is null
+	</select>
+	
+	<select id="findHouseList" resultType="GzfHouseInfo">
+		 SELECT 
+		  	a.id AS "id",
+		a.gzf_palaces_id AS "gzfPalacesId",
+		a.build_num AS "buildNum",
+		a.unit AS "unit",
+		a.room AS "room",
+		a.inner_area AS "innerArea",
+		a.use_area AS "useArea",
+		a.house_type AS "houseType",
+		a.house_stat AS "houseStat",
+		a.photo AS "photo",
+		a.gzf_house_property_id AS "gzfHousePropertyId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.code AS "code",
+		a.del_flag AS "delFlag",
+		a.water AS "water",
+		a.water_ip AS "waterIp",
+		a.elec AS "elec",
+		a.sync AS "sync",
+		a.elec_ip AS "elecIp",
+		a.elec_status AS "elecStatus",
+		a.water_status AS "waterStatus",
+		a.next_step AS "nextStep",
+		a.personal AS "personal",
+		b.name AS "gzfPalaces.name",
+		v.name AS "gzfPalaces.gzfVillage.name"
+		FROM
+		  gzf_house_info a 
+		  left join gzf_palaces b on b.id = a.gzf_palaces_id
+		  left join gzf_village v on v.id = b.gzf_village_id
+		  LEFT JOIN  (SELECT * FROM gzf_house_person WHERE del_flag = 0 ) p  on
+	    a.id = p.gzf_house_info_id
+	    WHERE a.next_Step != 1  and p.id is null
+	</select>
+	
+	
+	
+	<select id="findList" resultType="GzfHouseInfo">
+		SELECT 
+			<include refid="gzfHouseInfoColumns"/>
+		FROM gzf_house_info a
+		<include refid="gzfHouseInfoJoins"/>
+		<where>
+			a.del_flag = 0
+			<if test="innerArea != null and innerArea != ''">
+				AND a.inner_area = #{innerArea}
+			</if>
+			<if test="houseType != null and houseType != ''">
+				AND a.house_type = #{houseType}
+			</if>
+			<if test="buildNum != null and buildNum != ''">
+				And a.build_num = #{buildNum}
+			</if>
+			<if test="unit != null and unit != ''">
+				And a.unit = #{unit}
+			</if>
+			<if test="room != null and room != ''">
+				And a.room = #{room}
+			</if>
+			<if test="houseStat != null and houseStat != ''">
+				AND a.house_stat = #{houseStat}
+			</if>
+			<if test="houseAll != null and houseAll != ''">
+				AND concat(a.room,i.name,i.phone) like '%${houseAll}%'
+			</if>
+			<if test="gzfPalacesId != null and gzfPalacesId != ''">
+				AND a.gzf_palaces_id = #{gzfPalacesId}
+			</if>
+			<if test="water != null and water != ''">
+				AND a.water = #{water}
+			</if>
+			<if test="waterIp != null and waterIp != ''">
+				AND a.water_ip = #{waterIp}
+			</if>
+			<if test="elec != null and elec != ''">
+				AND a.elec = #{elec}
+			</if>
+			<if test="elecIp != null and elecIp != ''">
+				AND a.elec_ip = #{elecIp}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfHouseInfo">
+		SELECT 
+			<include refid="gzfHouseInfoColumns"/>
+		FROM gzf_house_info a
+		<include refid="gzfHouseInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+				AND a.create_date BETWEEN #{startDate} AND #{endDate}
+			</if>
+			<if test="palacesIds != null">
+				AND a.gzf_palaces_id IN
+				<foreach collection="palacesIds" open="(" close=")" index="index" item="item" separator=",">
+					#{item,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+			<if test="startVillageDate != null and startVillageDate != '' and endVillageDate != null and endVillageDate != ''">
+				AND v.create_date BETWEEN #{startVillageDate} AND #{endVillageDate}
+			</if>
+
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_house_info(
+			id,
+			gzf_palaces_id,
+			build_num,
+			unit,
+			room,
+			inner_area,
+			use_area,
+			house_type,
+			house_stat,
+			photo,
+			gzf_house_property_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{gzfPalacesId},
+			#{buildNum},
+			#{unit},
+			#{room},
+			#{innerArea},
+			#{useArea},
+			#{houseType},
+			#{houseStat},
+			#{photo},
+			#{gzfHousePropertyId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_house_info SET 	
+			gzf_palaces_id = #{gzfPalacesId},
+			build_num = #{buildNum},
+			unit = #{unit},
+			room = #{room},
+			inner_area = #{innerArea},
+			use_area = #{useArea},
+			house_type = #{houseType},
+			house_stat = #{houseStat},
+			photo = #{photo},
+			gzf_house_property_id = #{gzfHousePropertyId},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			water = #{water},
+			water_ip = #{waterIp},
+			elec = #{elec},
+			elec_ip = #{elecIp},
+			sync = #{sync},
+			next_step = #{nextStep},
+			personal = #{personal},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateInfoAndStatus">
+		UPDATE gzf_house_info SET
+		gzf_palaces_id = #{gzfPalacesId},
+		build_num = #{buildNum},
+		unit = #{unit},
+		room = #{room},
+		inner_area = #{innerArea},
+		use_area = #{useArea},
+		house_type = #{houseType},
+		house_stat = #{houseStat},
+		photo = #{photo},
+		gzf_house_property_id = #{gzfHousePropertyId},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		water = #{water},
+		water_ip = #{waterIp},
+		elec = #{elec},
+		elec_ip = #{elecIp},
+		sync = #{sync},
+		remarks = #{remarks},
+		elec_status = #{elecStatus},
+		water_status = #{waterStatus}
+		WHERE id = #{id}
+	</update>
+
+	<update id="delete">
+		UPDATE gzf_house_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

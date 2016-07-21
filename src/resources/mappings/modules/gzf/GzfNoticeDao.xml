@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfNoticeDao">
+    
+	<sql id="gzfNoticeColumns">
+		a.id AS "id",
+		a.gzf_village_id AS "gzfVillageId",
+		a.gzf_palaces_id AS "gzfPalacesId",
+		a.title AS "title",
+		a.content AS "content",
+		a.person AS "person",
+		a.phone AS "phone",
+		a.company AS "company",
+		a.notice_date AS "noticeDate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		b.name AS "gzfPalaces.name",
+		c.name AS "gzfVillage.name"
+	</sql>
+	
+	<sql id="gzfNoticeJoins">
+	left join gzf_palaces b on b.id = a.gzf_palaces_id
+	left join gzf_village c on c.id = a.gzf_village_id 
+	</sql>
+    
+	<select id="get" resultType="GzfNotice">
+		SELECT 
+			<include refid="gzfNoticeColumns"/>
+		FROM gzf_notice a
+		<include refid="gzfNoticeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfNotice">
+		SELECT 
+			<include refid="gzfNoticeColumns"/>
+		FROM gzf_notice a
+		<include refid="gzfNoticeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfNotice">
+		SELECT 
+			<include refid="gzfNoticeColumns"/>
+		FROM gzf_notice a
+		<include refid="gzfNoticeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_notice(
+			id,
+			gzf_village_id,
+			gzf_palaces_id,
+			title,
+			content,
+			person,
+			phone,
+			company,
+			notice_date,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{gzfVillageId},
+			#{gzfPalacesId},
+			#{title},
+			#{content},
+			#{person},
+			#{phone},
+			#{company},
+			#{noticeDate},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_notice SET 	
+			gzf_village_id = #{gzfVillageId},
+			gzf_palaces_id = #{gzfPalacesId},
+			title = #{title},
+			content = #{content},
+			person = #{person},
+			phone = #{phone},
+			company = #{company},
+			notice_date = #{noticeDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gzf_notice SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfInspectionDetailDao">
+    
+	<sql id="gzfInspectionDetailColumns">
+		a.id AS "id",
+		a.gzf_inspection_category_id AS "gzfInspectionCategoryId",
+		b.name AS "gzfInspectionCategory.name",
+		a.name AS "name"
+	</sql>
+	
+	<sql id="gzfInspectionDetailJoins">
+		left join gzf_inspection_category b on b.id = a.gzf_inspection_category_id
+	</sql>
+    
+	<select id="get" resultType="GzfInspectionDetail">
+		SELECT 
+			<include refid="gzfInspectionDetailColumns"/>
+		FROM gzf_inspection_detail a
+		<include refid="gzfInspectionDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfInspectionDetail">
+		SELECT 
+			<include refid="gzfInspectionDetailColumns"/>
+		FROM gzf_inspection_detail a
+		<include refid="gzfInspectionDetailJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfInspectionDetail">
+		SELECT 
+			<include refid="gzfInspectionDetailColumns"/>
+		FROM gzf_inspection_detail a
+		<include refid="gzfInspectionDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_inspection_detail(
+			id,
+			gzf_inspection_category_id,
+			name
+		) VALUES (
+			#{id},
+			#{gzfInspectionCategoryId},
+			#{name}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_inspection_detail SET 	
+			gzf_inspection_category_id = #{gzfInspectionCategoryId},
+			name = #{name}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gzf_inspection_detail
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

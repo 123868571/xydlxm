@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfHouseFamilyMemberDao">
+	<resultMap type="GzfHouseFamilyMember" id="result_bean">
+		<result property="createBy.id" column="create_by" />
+		<result property="updateBy.id" column="update_by" />
+	</resultMap>
+
+	<select id="get" resultMap="result_bean">
+		SELECT * FROM `gzf_house_family_member`
+		WHERE `id` = #{id}
+	</select>
+
+	<select id="findList" resultMap="result_bean">
+		SELECT * FROM `gzf_house_family_member`
+		<where>
+			<if test="memberIdcard!=null and memberIdcard!=''">
+				AND `member_idcard` = #{memberIdcard}		
+			</if>
+			<if test="applyFormId!=null and applyFormId!=''">
+				AND `apply_form_id` = #{applyFormId}		
+			</if>
+			<if test="DEL_FLAG_NORMAL>-1">
+				AND `del_flag` = #{DEL_FLAG_NORMAL}
+			</if>
+		</where>
+	</select>
+
+	<select id="findAllList" resultMap="result_bean">
+		SELECT * FROM `gzf_house_family_member`
+		<where>
+			`del_flag` = #{DEL_FLAG_NORMAL}
+		</where>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO `gzf_house_family_member`(
+		`id`,
+		`apply_form_id`,
+		`member_name`,
+		`member_idcard`,
+		`member_phone`,
+		`member_marital_status`,
+		`member_company`,
+		`member_income`,
+		`member_relation`,
+		`create_by`,
+		`create_date`,
+		`update_by`,
+		`update_date`,
+		`remarks`,
+		`del_flag`
+		) VALUES (
+		#{id},
+		#{applyFormId},
+		#{memberName},
+		#{memberIdcard},
+		#{memberPhone},
+		#{memberMaritalStatus},
+		#{memberCompany},
+		#{memberIncome},
+		#{memberRelation},
+		#{createBy.id},
+		#{createDate},
+		#{updateBy.id},
+		#{updateDate},
+		#{remarks},
+		#{delFlag}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE `gzf_house_family_member`
+		<set>
+			<if test="memberName!=null and memberName!=''">
+				`member_name` = #{memberName},
+			</if>
+			<if test="memberIdcard!=null and memberIdcard!=''">
+				`member_idcard` = #{memberIdcard},
+			</if>
+			<if test="memberPhone!=null and memberPhone!=''">
+				`member_phone` = #{memberPhone},
+			</if>
+			<if test="memberMaritalStatus>-1">
+				`member_marital_status` = #{memberMaritalStatus},
+			</if>
+			<if test="memberCompany!=null and memberCompany!=''">
+				`member_company` = #{memberCompany},
+			</if>
+			<if test="memberIncome!=null and memberIncome!=''">
+				`member_income` = #{memberIncome},
+			</if>
+			<if test="memberRelation>-1">
+				`member_relation` = #{memberRelation},
+			</if>
+			`update_by` = #{updateBy.id},
+			`update_date` = #{updateDate},
+			`remarks` = #{remarks}
+		</set>
+		<where>
+			`id` = #{id}
+		</where>
+	</update>
+
+	<update id="delete">
+		UPDATE `gzf_house_family_member` SET
+		`del_flag` = #{DEL_FLAG_DELETE}
+		<where>
+			`id` = #{id}
+		</where>
+	</update>
+
+</mapper>

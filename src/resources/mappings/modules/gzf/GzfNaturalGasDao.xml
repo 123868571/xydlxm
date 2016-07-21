@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfNaturalGasDao">
+    
+	<sql id="gzfNaturalGasColumns">
+		a.id AS "id",
+		a.gzf_household_info_id AS "gzfHouseholdInfoId",
+		a.gzf_house_info_id AS "gzfHouseInfoId",
+		a.num AS "num",
+		a.time AS "time",
+		a.remarks AS "remarks",
+		a.update_date AS "updateDate",
+		
+		ghp.gzf_house_info_id AS "gzfHousePerson.gzfHouseInfoId",
+		ghp.gzf_household_info_id AS "gzfHousePerson.gzfHouseholdInfoId",
+		
+		ghi.name AS "gzfHousePerson.gzfHouseholdInfo.name",
+		ghi.sex AS "gzfHousePerson.gzfHouseholdInfo.sex",
+		ghi.company AS "gzfHousePerson.gzfHouseholdInfo.company",
+		ghi.industry AS "gzfHousePerson.gzfHouseholdInfo.industry",
+		ghi.work_time AS "gzfHousePerson.gzfHouseholdInfo.workTime",
+		ghi.province AS "gzfHousePerson.gzfHouseholdInfo.province",
+		ghi.city AS "gzfHousePerson.gzfHouseholdInfo.city",
+		ghi.area AS "gzfHousePerson.gzfHouseholdInfo.area",
+		ghi.address AS "gzfHousePerson.gzfHouseholdInfo.address",
+		ghi.education AS "gzfHousePerson.gzfHouseholdInfo.education",
+		ghi.job_category AS "gzfHousePerson.gzfHouseholdInfo.jobCategory",
+		ghi.household AS "gzfHousePerson.gzfHouseholdInfo.household",
+		ghi.income_range AS "gzfHousePerson.gzfHouseholdInfo.incomeRange",
+		ghi.phone AS "gzfHousePerson.gzfHouseholdInfo.phone",
+		
+		hi.id AS "gzfHousePerson.gzfHouseInfo.id",
+		hi.build_num AS "gzfHousePerson.gzfHouseInfo.buildNum",
+		hi.unit AS "gzfHousePerson.gzfHouseInfo.unit",
+		hi.room AS "gzfHousePerson.gzfHouseInfo.room",
+		hi.inner_area AS "gzfHousePerson.gzfHouseInfo.innerArea",
+		hi.use_area AS "gzfHousePerson.gzfHouseInfo.useArea",
+		hi.house_type AS "gzfHousePerson.gzfHouseInfo.houseType",
+		hi.house_stat AS "gzfHousePerson.gzfHouseInfo.houseStat",
+
+		b.gzf_village_id AS "gzfHousePerson.gzfHouseInfo.gzfPalaces.gzfVillageId",
+		b.name AS "gzfHousePerson.gzfHouseInfo.gzfPalaces.name",
+		c.name AS "gzfHousePerson.gzfHouseInfo.gzfPalaces.gzfVillage.name"
+		
+	</sql>
+	
+	<sql id="gzfNaturalGasJoins">
+		right join gzf_house_info hi on hi.id = a.gzf_house_info_id
+		left join (SELECT * FROM gzf_house_person WHERE del_flag = 0) ghp on a.gzf_house_info_id = ghp.gzf_house_info_id
+		left join gzf_household_info ghi on ghi.id = ghp.gzf_household_info_id
+		left join gzf_palaces b on b.id = hi.gzf_palaces_id
+		left join gzf_village c on c.id = b.gzf_village_id 
+	</sql>
+	
+	<select id="getByHouseId" resultType="GzfNaturalGas">
+		SELECT 
+			<include refid="gzfNaturalGasColumns"/>
+		FROM gzf_natural_gas a
+		<include refid="gzfNaturalGasJoins"/>
+		WHERE hi.id = #{id}
+		ORDER BY a.update_date DESC
+	</select>
+    
+	<select id="get" resultType="GzfNaturalGas">
+		SELECT 
+			<include refid="gzfNaturalGasColumns"/>
+		FROM gzf_natural_gas a
+		<include refid="gzfNaturalGasJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfNaturalGas">
+		SELECT 
+			<include refid="gzfNaturalGasColumns"/>
+		FROM gzf_natural_gas a
+		<include refid="gzfNaturalGasJoins"/>
+		<where>
+			
+			<if test="gzfHouseholdInfoId != null and gzfHouseholdInfoId != ''">
+				AND a.gzf_household_info_id = #{gzfHouseholdInfoId}
+			</if>
+			<if test="gzfHouseInfoId != null and gzfHouseInfoId != ''">
+				AND a.gzf_house_info_id = #{gzfHouseInfoId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfNaturalGas">
+		SELECT 
+			<include refid="gzfNaturalGasColumns"/>
+		FROM gzf_natural_gas a
+		<include refid="gzfNaturalGasJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_natural_gas(
+			id,
+			gzf_household_info_id,
+			gzf_house_info_id,
+			num,
+			time,
+			remarks,
+			update_date
+		) VALUES (
+			#{id},
+			#{gzfHouseholdInfoId},
+			#{gzfHouseInfoId},
+			#{num},
+			#{time},
+			#{remarks},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_natural_gas SET 	
+			gzf_household_info_id = #{gzfHouseholdInfoId},
+			gzf_house_info_id = #{gzfHouseInfoId},
+			num = #{num},
+			time = #{time},
+			remarks = #{remarks},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gzf_natural_gas
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

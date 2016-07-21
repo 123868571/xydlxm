@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.paopao.hzgzf.modules.pay.dao.GzfAcctTransferMapper" >
+  <resultMap id="BaseResultMap" type="com.paopao.hzgzf.modules.pay.entity.GzfAcctTransfer" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="src_acct_id" property="srcAcctId" jdbcType="VARCHAR" />
+    <result column="dest_acct_id" property="destAcctId" jdbcType="VARCHAR" />
+    <result column="src_spec_payment_id" property="srcSpecPaymentId" jdbcType="INTEGER" />
+    <result column="dest_spec_payment_id" property="destSpecPaymentId" jdbcType="INTEGER" />
+    <result column="opt_code" property="optCode" jdbcType="VARCHAR" />
+    <result column="src_balance_id" property="srcBalanceId" jdbcType="VARCHAR" />
+    <result column="dest_balance_id" property="destBalanceId" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy.id" jdbcType="VARCHAR" />
+    <result column="update_by" property="updateBy.id" jdbcType="VARCHAR" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="external_transfer_id" property="externalTransferId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, src_acct_id, dest_acct_id, src_spec_payment_id, dest_spec_payment_id, opt_code, 
+    src_balance_id, dest_balance_id, amount, del_flag, update_date, create_date, create_by, 
+    update_by, remarks, external_transfer_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctTransferExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from gzf_acct_transfer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from gzf_acct_transfer
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from gzf_acct_transfer
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctTransferExample" >
+    delete from gzf_acct_transfer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctTransfer" >
+    insert into gzf_acct_transfer (id, src_acct_id, dest_acct_id, 
+      src_spec_payment_id, dest_spec_payment_id, opt_code, 
+      src_balance_id, dest_balance_id, amount, 
+      del_flag, update_date, create_date, 
+       <if test="createBy != null and createBy.id != null" >
+        create_by,
+      </if>
+      <if test="updateBy != null and updateBy.id != null" >
+        update_by,
+      </if>
+      remarks, external_transfer_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{srcAcctId,jdbcType=VARCHAR}, #{destAcctId,jdbcType=VARCHAR}, 
+      #{srcSpecPaymentId,jdbcType=INTEGER}, #{destSpecPaymentId,jdbcType=INTEGER}, #{optCode,jdbcType=VARCHAR}, 
+      #{srcBalanceId,jdbcType=VARCHAR}, #{destBalanceId,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, 
+      #{delFlag,jdbcType=CHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}, 
+      <if test="createBy != null and createBy.id != null" >
+        #{createBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null and updateBy.id != null" >
+        #{updateBy.id,jdbcType=VARCHAR},
+      </if>
+      #{remarks,jdbcType=VARCHAR},#{externalTransferId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctTransfer" >
+    insert into gzf_acct_transfer
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="srcAcctId != null" >
+        src_acct_id,
+      </if>
+      <if test="destAcctId != null" >
+        dest_acct_id,
+      </if>
+      <if test="srcSpecPaymentId != null" >
+        src_spec_payment_id,
+      </if>
+      <if test="destSpecPaymentId != null" >
+        dest_spec_payment_id,
+      </if>
+      <if test="optCode != null" >
+        opt_code,
+      </if>
+      <if test="srcBalanceId != null" >
+        src_balance_id,
+      </if>
+      <if test="destBalanceId != null" >
+        dest_balance_id,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="createBy != null and createBy.id != null" >
+        create_by,
+      </if>
+      <if test="updateBy != null and updateBy.id != null" >
+        update_by,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="externalTransferId != null" >
+        external_transfer_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="srcAcctId != null" >
+        #{srcAcctId,jdbcType=VARCHAR},
+      </if>
+      <if test="destAcctId != null" >
+        #{destAcctId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcSpecPaymentId != null" >
+        #{srcSpecPaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="destSpecPaymentId != null" >
+        #{destSpecPaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="optCode != null" >
+        #{optCode,jdbcType=VARCHAR},
+      </if>
+      <if test="srcBalanceId != null" >
+        #{srcBalanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="destBalanceId != null" >
+        #{destBalanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null and createBy.id != null" >
+        #{createBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null and updateBy.id != null" >
+        #{updateBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="externalTransferId != null" >
+        #{externalTransferId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctTransferExample" resultType="java.lang.Integer" >
+    select count(*) from gzf_acct_transfer
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update gzf_acct_transfer
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.srcAcctId != null" >
+        src_acct_id = #{record.srcAcctId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.destAcctId != null" >
+        dest_acct_id = #{record.destAcctId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.srcSpecPaymentId != null" >
+        src_spec_payment_id = #{record.srcSpecPaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.destSpecPaymentId != null" >
+        dest_spec_payment_id = #{record.destSpecPaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.optCode != null" >
+        opt_code = #{record.optCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.srcBalanceId != null" >
+        src_balance_id = #{record.srcBalanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.destBalanceId != null" >
+        dest_balance_id = #{record.destBalanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=INTEGER},
+      </if>
+      <if test="record.delFlag != null" >
+        del_flag = #{record.delFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.updateDate != null" >
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createDate != null" >
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy.id != null" >
+        create_by = #{record.createBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateBy.id != null" >
+        update_by = #{record.updateBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.externalTransferId != null" >
+        external_transfer_id = #{record.externalTransferId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update gzf_acct_transfer
+    set id = #{record.id,jdbcType=VARCHAR},
+      src_acct_id = #{record.srcAcctId,jdbcType=VARCHAR},
+      dest_acct_id = #{record.destAcctId,jdbcType=VARCHAR},
+      src_spec_payment_id = #{record.srcSpecPaymentId,jdbcType=INTEGER},
+      dest_spec_payment_id = #{record.destSpecPaymentId,jdbcType=INTEGER},
+      opt_code = #{record.optCode,jdbcType=VARCHAR},
+      src_balance_id = #{record.srcBalanceId,jdbcType=VARCHAR},
+      dest_balance_id = #{record.destBalanceId,jdbcType=VARCHAR},
+      amount = #{record.amount,jdbcType=INTEGER},
+      del_flag = #{record.delFlag,jdbcType=CHAR},
+      update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy.id,jdbcType=VARCHAR},
+      update_by = #{record.updateBy.id,jdbcType=VARCHAR},
+      external_transfer_id = #{record.externalTransferId,jdbcType=VARCHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctTransfer" >
+    update gzf_acct_transfer
+    <set >
+      <if test="srcAcctId != null" >
+        src_acct_id = #{srcAcctId,jdbcType=VARCHAR},
+      </if>
+      <if test="destAcctId != null" >
+        dest_acct_id = #{destAcctId,jdbcType=VARCHAR},
+      </if>
+      <if test="srcSpecPaymentId != null" >
+        src_spec_payment_id = #{srcSpecPaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="destSpecPaymentId != null" >
+        dest_spec_payment_id = #{destSpecPaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="optCode != null" >
+        opt_code = #{optCode,jdbcType=VARCHAR},
+      </if>
+      <if test="srcBalanceId != null" >
+        src_balance_id = #{srcBalanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="destBalanceId != null" >
+        dest_balance_id = #{destBalanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null and createBy.id != null" >
+        create_by = #{createBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null and updateBy.id != null" >
+        update_by = #{updateBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="externalTransferId != null" >
+        external_transfer_id = #{externalTransferId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctTransfer" >
+    update gzf_acct_transfer
+    set src_acct_id = #{srcAcctId,jdbcType=VARCHAR},
+      dest_acct_id = #{destAcctId,jdbcType=VARCHAR},
+      src_spec_payment_id = #{srcSpecPaymentId,jdbcType=INTEGER},
+      dest_spec_payment_id = #{destSpecPaymentId,jdbcType=INTEGER},
+      opt_code = #{optCode,jdbcType=VARCHAR},
+      src_balance_id = #{srcBalanceId,jdbcType=VARCHAR},
+      dest_balance_id = #{destBalanceId,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      del_flag = #{delFlag,jdbcType=CHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_by = #{createBy.id,jdbcType=VARCHAR},
+      update_by = #{updateBy.id,jdbcType=VARCHAR},
+      external_transfer_id = #{externalTransferId,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <sql id="Where">
+  	<where>
+  		 <if test="accountBalanceId != null" >
+       			and account_balance_id = #{accountBalanceId,jdbcType=INTEGER}
+     		  </if>
+	      <if test="accountId != null and accountId != ''" >
+	        	and account_id = #{accountId,jdbcType=VARCHAR}
+	      </if>
+	      <if test="externalSeq != null" >
+	        	and external_seq = #{externalSeq,jdbcType=VARCHAR}
+	      </if>
+	      <if test="priPayLogId != null" >
+	        	and pri_pay_log_id = #{priPayLogId,jdbcType=VARCHAR}
+	      </if>
+	      <if test="bankId != null" >
+	        	and bank_id = #{bankId,jdbcType=VARCHAR}
+	      </if>
+	      <if test="paymentType != null" >
+	        	and payment_type = #{paymentType,jdbcType=CHAR}
+	      </if>
+	      <if test="payMethod != null" >
+	        	and pay_method = #{payMethod,jdbcType=CHAR}
+	      </if>
+	      <if test="certificateType != null" >
+	        	and certificate_type = #{certificateType,jdbcType=CHAR}
+	      </if>
+	      <if test="certificateCode != null" >
+	        	and certificate_code = #{certificateCode,jdbcType=VARCHAR}
+	      </if>
+	      <if test="balanceTypeId != null" >
+	        	and balance_type_id = #{balanceTypeId,jdbcType=INTEGER}
+	      </if>
+	      <if test="spePaymentId != null" >
+	        	and spe_payment_id = #{spePaymentId,jdbcType=INTEGER}
+	      </if>
+	      <if test="optCode != null" >
+	        	and opt_code = #{optCode,jdbcType=VARCHAR}
+	      </if>
+	      <if test="beginTime != null">
+  			 <![CDATA[ and create_date >= #{beginTime} ]]>
+  		</if>
+  		<if test="endTime != null">
+  			<![CDATA[ and create_date <= #{endTime} ]]>
+  		</if>
+  	</where>
+  </sql>
+  
+  <select id="get" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAcctTransfer">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_acct_transfer a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAcctTransfer">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_acct_transfer a
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAcctTransfer">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_acct_transfer a
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="delete">
+		delete from gzf_acct_transfer 
+		WHERE id = #{id}
+	</update>
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.common.ftp.dao.ComFtpConfDao">
+    
+	<sql id="comFtpConfColumns">
+		a.id AS "id",
+		a.ftp_code AS "ftpCode",
+		a.sub_class AS "subClass",
+		a.remote_path AS "remotePath",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy",
+		a.update_date AS "updateDate",
+		a.op_id AS "opId",
+		a.del_flag AS "delFlag",
+		a.remark AS "remark"
+	</sql>
+	
+	<sql id="comFtpConfJoins">
+	</sql>
+    
+	<select id="get" resultType="ComFtpConf">
+		SELECT 
+			<include refid="comFtpConfColumns"/>
+		FROM com_ftp_conf a
+		<include refid="comFtpConfJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ComFtpConf">
+		SELECT 
+			<include refid="comFtpConfColumns"/>
+		FROM com_ftp_conf a
+		<include refid="comFtpConfJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="ftpCode != null and ftpCode != ''">
+				AND a.ftp_code LIKE 
+					<if test="dbName == 'oracle'">'%'||#{ftpCode}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{ftpCode}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{ftpCode},'%')</if>
+			</if>
+			<if test="subClass != null and subClass != ''">
+				AND a.sub_class LIKE 
+					<if test="dbName == 'oracle'">'%'||#{subClass}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{subClass}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{subClass},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ComFtpConf">
+		SELECT 
+			<include refid="comFtpConfColumns"/>
+		FROM com_ftp_conf a
+		<include refid="comFtpConfJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO com_ftp_conf(
+			id,
+			ftp_code,
+			sub_class,
+			remote_path,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			op_id,
+			del_flag,
+			remark
+		) VALUES (
+			#{id},
+			#{ftpCode},
+			#{subClass},
+			#{remotePath},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{opId},
+			#{delFlag},
+			#{remark}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE com_ftp_conf SET 	
+			ftp_code = #{ftpCode},
+			sub_class = #{subClass},
+			remote_path = #{remotePath},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			op_id = #{opId},
+			remark = #{remark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE com_ftp_conf SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

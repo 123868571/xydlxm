@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.paopao.hzgzf.modules.pay.dao.GzfAcctItemTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.paopao.hzgzf.modules.pay.entity.GzfAcctItemType" >
+    <id column="acct_item_type_id" property="acctItemTypeId" jdbcType="INTEGER" />
+    <result column="acct_item_type_code" property="acctItemTypeCode" jdbcType="VARCHAR" />
+    <result column="acct_item_type_name" property="acctItemTypeName" jdbcType="VARCHAR" />
+    <result column="acct_item_type_desc" property="acctItemTypeDesc" jdbcType="VARCHAR" />
+    <result column="print_priority" property="printPriority" jdbcType="INTEGER" />
+    <result column="bill_priority" property="billPriority" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="state_date" property="stateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    acct_item_type_id, acct_item_type_code, acct_item_type_name, acct_item_type_desc, 
+    print_priority, bill_priority, del_flag, state_date
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctItemTypeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from gzf_acct_item_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from gzf_acct_item_type
+    where acct_item_type_id = #{acctItemTypeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from gzf_acct_item_type
+    where acct_item_type_id = #{acctItemTypeId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctItemTypeExample" >
+    delete from gzf_acct_item_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctItemType" >
+    insert into gzf_acct_item_type (acct_item_type_id, acct_item_type_code, 
+      acct_item_type_name, acct_item_type_desc, print_priority, 
+      bill_priority, del_flag, state_date
+      )
+    values (#{acctItemTypeId,jdbcType=INTEGER}, #{acctItemTypeCode,jdbcType=VARCHAR}, 
+      #{acctItemTypeName,jdbcType=VARCHAR}, #{acctItemTypeDesc,jdbcType=VARCHAR}, #{printPriority,jdbcType=INTEGER}, 
+      #{billPriority,jdbcType=INTEGER}, #{delFlag,jdbcType=CHAR}, #{stateDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctItemType" >
+    insert into gzf_acct_item_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="acctItemTypeId != null" >
+        acct_item_type_id,
+      </if>
+      <if test="acctItemTypeCode != null" >
+        acct_item_type_code,
+      </if>
+      <if test="acctItemTypeName != null" >
+        acct_item_type_name,
+      </if>
+      <if test="acctItemTypeDesc != null" >
+        acct_item_type_desc,
+      </if>
+      <if test="printPriority != null" >
+        print_priority,
+      </if>
+      <if test="billPriority != null" >
+        bill_priority,
+      </if>
+      <if test="delFlag != null" >
+        delFlag,
+      </if>
+      <if test="stateDate != null" >
+        state_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="acctItemTypeId != null" >
+        #{acctItemTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="acctItemTypeCode != null" >
+        #{acctItemTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="acctItemTypeName != null" >
+        #{acctItemTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="acctItemTypeDesc != null" >
+        #{acctItemTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="printPriority != null" >
+        #{printPriority,jdbcType=INTEGER},
+      </if>
+      <if test="billPriority != null" >
+        #{billPriority,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="stateDate != null" >
+        #{stateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctItemTypeExample" resultType="java.lang.Integer" >
+    select count(*) from gzf_acct_item_type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update gzf_acct_item_type
+    <set >
+      <if test="record.acctItemTypeId != null" >
+        acct_item_type_id = #{record.acctItemTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.acctItemTypeCode != null" >
+        acct_item_type_code = #{record.acctItemTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.acctItemTypeName != null" >
+        acct_item_type_name = #{record.acctItemTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.acctItemTypeDesc != null" >
+        acct_item_type_desc = #{record.acctItemTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.printPriority != null" >
+        print_priority = #{record.printPriority,jdbcType=INTEGER},
+      </if>
+      <if test="record.billPriority != null" >
+        bill_priority = #{record.billPriority,jdbcType=INTEGER},
+      </if>
+      <if test="record.delFlag != null" >
+        del_flag = #{record.delFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.stateDate != null" >
+        state_date = #{record.stateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update gzf_acct_item_type
+    set acct_item_type_id = #{record.acctItemTypeId,jdbcType=INTEGER},
+      acct_item_type_code = #{record.acctItemTypeCode,jdbcType=VARCHAR},
+      acct_item_type_name = #{record.acctItemTypeName,jdbcType=VARCHAR},
+      acct_item_type_desc = #{record.acctItemTypeDesc,jdbcType=VARCHAR},
+      print_priority = #{record.printPriority,jdbcType=INTEGER},
+      bill_priority = #{record.billPriority,jdbcType=INTEGER},
+      del_flag = #{record.delFlag,jdbcType=CHAR},
+      state_date = #{record.stateDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctItemType" >
+    update gzf_acct_item_type
+    <set >
+      <if test="acctItemTypeCode != null" >
+        acct_item_type_code = #{acctItemTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="acctItemTypeName != null" >
+        acct_item_type_name = #{acctItemTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="acctItemTypeDesc != null" >
+        acct_item_type_desc = #{acctItemTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="printPriority != null" >
+        print_priority = #{printPriority,jdbcType=INTEGER},
+      </if>
+      <if test="billPriority != null" >
+        bill_priority = #{billPriority,jdbcType=INTEGER},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=CHAR},
+      </if>
+      <if test="stateDate != null" >
+        state_date = #{stateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where acct_item_type_id = #{acctItemTypeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAcctItemType" >
+    update gzf_acct_item_type
+    set acct_item_type_code = #{acctItemTypeCode,jdbcType=VARCHAR},
+      acct_item_type_name = #{acctItemTypeName,jdbcType=VARCHAR},
+      acct_item_type_desc = #{acctItemTypeDesc,jdbcType=VARCHAR},
+      print_priority = #{printPriority,jdbcType=INTEGER},
+      bill_priority = #{billPriority,jdbcType=INTEGER},
+      del_flag = #{delFlag,jdbcType=CHAR},
+      state_date = #{stateDate,jdbcType=TIMESTAMP}
+    where acct_item_type_id = #{acctItemTypeId,jdbcType=INTEGER}
+  </update>
+  
+  
+  <select id="get" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAcctItemType">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_acct_item_type a
+		WHERE a.acct_item_type_id = #{acctItemTypeId}
+	</select>
+	
+	<select id="findList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAcctItemType">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_acct_item_type a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.acct_item_type_id DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAcctItemType">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_acct_item_type a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.acct_item_type_id DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="delete">
+		UPDATE gzf_acct_item_type SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE acct_item_type_id = #{acctItemTypeId}
+	</update>
+</mapper>

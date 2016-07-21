@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.dlj.dao.ComRecordDao">
+    
+	<sql id="comRecordColumns">
+		a.id AS "id",
+		a.refer_id AS "referId",
+		a.refer_type AS "referType",
+		a.change_column AS "changeColumn",
+		a.change_column_desc AS "changeColumnDesc",
+		a.bef_value AS "befValue",
+		a.aft_value AS "aftValue",
+		a.is_attach AS "isAttach",
+		a.modify_type AS "modifyType",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.update_by as "updateBy.id",
+		a.op_id AS "opId",
+		a.del_flag AS "delFlag",
+		a.remark AS "remark"
+	</sql>
+	
+	<sql id="comRecordJoins">
+	</sql>
+    
+	<select id="get" resultType="ComRecord">
+		SELECT 
+			<include refid="comRecordColumns"/>
+		FROM com_record a
+		<include refid="comRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ComRecord">
+		SELECT 
+			<include refid="comRecordColumns"/>
+		FROM com_record a
+		<include refid="comRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="referType != null and referType != ''">
+				AND a.refer_type = #{referType}
+			</if>
+			<if test="changeColumn != null and changeColumn != ''">
+				AND a.change_column = #{changeColumn}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ComRecord">
+		SELECT 
+			<include refid="comRecordColumns"/>
+		FROM com_record a
+		<include refid="comRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO com_record(
+			id,
+			refer_id,
+			refer_type,
+			change_column,
+			change_column_desc,
+			bef_value,
+			aft_value,
+			is_attach,
+			modify_type,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			op_id,
+			del_flag,
+			remark
+		) VALUES (
+			#{id},
+			#{referId},
+			#{referType},
+			#{changeColumn},
+			#{changeColumnDesc},
+			#{befValue},
+			#{aftValue},
+			#{isAttach},
+			#{modifyType},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{opId},
+			#{delFlag},
+			#{remark}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE com_record SET 	
+			refer_id = #{referId},
+			refer_type = #{referType},
+			change_column = #{changeColumn},
+			change_column_desc = #{changeColumnDesc},
+			bef_value = #{befValue},
+			aft_value = #{aftValue},
+			is_attach = #{isAttach},
+			modify_type = #{modifyType},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			op_id = #{opId},
+			remark = #{remark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE com_record SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfInspectionLogDao">
+    
+	<sql id="gzfInspectionLogColumns">
+		a.id AS "id",
+		a.time AS "time",
+		a.gzf_village_id AS "gzfVillageId",
+		a.unit AS "unit",
+		a.inspection_name AS "inspectionName",
+		a.name AS "name",
+		a.inspection_id AS "inspectionId",
+		a.inspection_phone AS "inspectionPhone",
+		a.phone AS "phone",
+		a.computer_status AS "computerStatus",
+		a.computer_c AS "computerC",
+		a.computer_logbak AS "computerLogbak",
+		a.computer_feedback AS "computerFeedback",
+		a.room_machine AS "roomMachine",
+		a.room_control AS "roomControl",
+		a.room_indoor AS "roomIndoor",
+		a.room_feedback AS "roomFeedback",
+		a.computer_status_remarks AS "computerStatusRemarks",
+		a.computer_c_remarks AS "computerCRemarks",
+		a.computer_logbak_remarks AS "computerLogbakRemarks",
+		a.room_machine_remarks AS "roomMachineRemarks",
+		a.room_control_remarks AS "roomControlRemarks",
+		a.room_indoor_remarks AS "roomIndoorRemarks",
+		
+		v.name AS "gzfVillage.name",
+		v.next_level AS "gzfVillage.nextLevel",
+		v.build_year AS "gzfVillage.buildYear",
+		v.belong_company AS "gzfVillage.belongCompany",
+		v.property_company AS "gzfVillage.propertyCompany",
+		v.construct_company AS "gzfVillage.constructCompany",
+		v.location AS "gzfVillage.location",
+		v.land_grade AS "gzfVillage.landGrade",
+		v.land_no AS "gzfVillage.landNo",
+		v.right_number AS "gzfVillage.rightNumber",
+		v.right_company AS "gzfVillage.rightCompany"
+	</sql>
+	
+	<sql id="gzfInspectionLogJoins">
+		left join gzf_village v on v.id = a.gzf_village_id
+	</sql>
+    
+	<select id="get" resultType="GzfInspectionLog">
+		SELECT 
+			<include refid="gzfInspectionLogColumns"/>
+		FROM gzf_inspection_log a
+		<include refid="gzfInspectionLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfInspectionLog">
+		SELECT 
+			<include refid="gzfInspectionLogColumns"/>
+		FROM gzf_inspection_log a
+		<include refid="gzfInspectionLogJoins"/>
+		<where>
+			
+			<if test="time != null and time != ''">
+				AND a.time = #{time}
+			</if>
+			<if test="inspectionName != null and inspectionName != ''">
+				AND a.inspection_name = #{inspectionName}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfInspectionLog">
+		SELECT 
+			<include refid="gzfInspectionLogColumns"/>
+		FROM gzf_inspection_log a
+		<include refid="gzfInspectionLogJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_inspection_log(
+			id,
+			time,
+			gzf_village_id,
+			unit,
+			inspection_name,
+			name,
+			inspection_id,
+			inspection_phone,
+			phone,
+			computer_status,
+			computer_c,
+			computer_logbak,
+			computer_feedback,
+			room_machine,
+			room_control,
+			room_indoor,
+			room_feedback,
+			computer_status_remarks,
+			computer_c_remarks,
+			computer_logbak_remarks,
+			room_machine_remarks,
+			room_control_remarks,
+			room_indoor_remarks
+		) VALUES (
+			#{id},
+			#{time},
+			#{gzfVillageId},
+			#{unit},
+			#{inspectionName},
+			#{name},
+			#{inspectionId},
+			#{inspectionPhone},
+			#{phone},
+			#{computerStatus},
+			#{computerC},
+			#{computerLogbak},
+			#{computerFeedback},
+			#{roomMachine},
+			#{roomControl},
+			#{roomIndoor},
+			#{roomFeedback},
+			#{computerStatusRemarks},
+			#{computerCRemarks},
+			#{computerLogbakRemarks},
+			#{roomMachineRemarks},
+			#{roomControlRemarks},
+			#{roomIndoorRemarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_inspection_log SET 	
+			time = #{time},
+			gzf_village_id = #{gzfVillageId},
+			unit = #{unit},
+			inspection_name = #{inspectionName},
+			name = #{name},
+			inspection_id = #{inspectionId},
+			inspection_phone = #{inspectionPhone},
+			phone = #{phone},
+			computer_status = #{computerStatus},
+			computer_c = #{computerC},
+			computer_logbak = #{computerLogbak},
+			computer_feedback = #{computerFeedback},
+			room_machine = #{roomMachine},
+			room_control = #{roomControl},
+			room_indoor = #{roomIndoor},
+			room_feedback = #{roomFeedback},
+			computer_status_remarks = #{computerStatusRemarks},
+			computer_c_remarks = #{computerCRemarks},
+			computer_logbak_remarks = #{computerLogbakRemarks},
+			room_machine_remarks = #{roomMachineRemarks},
+			room_control_remarks = #{roomControlRemarks},
+			room_indoor_remarks = #{roomIndoorRemarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gzf_inspection_log
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

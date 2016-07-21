@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfRepairDao">
+    
+	<sql id="gzfRepairColumns">
+		a.id AS "id",
+		a.repair_type AS "repairType",
+		a.repair_by AS "repairBy",
+		a.phone AS "phone",
+		a.repair_project AS "repairProject",
+		a.repair_num AS "repairNum",
+		a.content AS "content",
+		a.remarks AS "remarks",
+		a.repair_date AS "repairDate",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.gzf_house_info_id AS "gzfHouseInfoId"
+	</sql>
+	
+	<sql id="gzfRepairJoins">
+	</sql>
+    
+	<select id="get" resultType="GzfRepair">
+		SELECT 
+			<include refid="gzfRepairColumns"/>
+		FROM gzf_repair a
+		<include refid="gzfRepairJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfRepair">
+		SELECT 
+			<include refid="gzfRepairColumns"/>
+		FROM gzf_repair a
+		<include refid="gzfRepairJoins"/>
+		<where>
+			
+			<if test="repairType != null and repairType != ''">
+				AND a.repair_type = #{repairType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfRepair">
+		SELECT 
+			<include refid="gzfRepairColumns"/>
+		FROM gzf_repair a
+		<include refid="gzfRepairJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_repair(
+			id,
+			repair_type,
+			repair_by,
+			phone,
+			repair_project,
+			repair_num,
+			content,
+			remarks,
+			repair_date,
+			create_date,
+			create_by,
+			update_date,
+			update_by,
+			gzf_house_info_id
+		) VALUES (
+			#{id},
+			#{repairType},
+			#{repairBy},
+			#{phone},
+			#{repairProject},
+			#{repairNum},
+			#{content},
+			#{remarks},
+			#{repairDate},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{gzfHouseInfoId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_repair SET 	
+			repair_type = #{repairType},
+			repair_by = #{repairBy},
+			phone = #{phone},
+			repair_project = #{repairProject},
+			repair_num = #{repairNum},
+			content = #{content},
+			remarks = #{remarks},
+			repair_date = #{repairDate},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			gzf_house_info_id = #{gzfHouseInfoId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gzf_repair
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

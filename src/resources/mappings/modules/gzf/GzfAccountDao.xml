@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfAccountDao" >
+  <resultMap id="BaseResultMap" type="com.paopao.hzgzf.modules.pay.entity.GzfAccount" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+    <result column="cust_id" property="custId" jdbcType="VARCHAR" />
+    <result column="account_type" property="accountType" jdbcType="CHAR" />
+    <result column="pay_method" property="payMethod" jdbcType="CHAR" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="account_credit" property="accountCredit" jdbcType="INTEGER" />
+    <result column="phone_no" property="phoneNo" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="op_id" property="opId" jdbcType="INTEGER" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="cycle_end_day" property="cycleEndDay" jdbcType="INTEGER" />
+    <result column="update_by" property="updateBy.id" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy.id" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    
+    <!--<association property="housePerson" javaType="com.paopao.hzgzf.modules.gzf.entity.GzfHousePerson" 
+    	select="com.paopao.hzgzf.modules.gzf.dao.GzfHousePersonDao.get" column="cust_id">
+    
+    </association>
+    
+    <association property="balances" javaType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance" 
+    	select="com.paopao.hzgzf.modules.pay.dao.GzfAccountBalanceMapper.getBalancesByAccountId" column="id">
+    
+    </association>
+    
+     <association property="payments" javaType="com.paopao.hzgzf.modules.pay.entity.GzfPayment" 
+    	select="com.paopao.hzgzf.modules.pay.dao.GzfPaymentMapper.getPaymentByAccountId" column="id">
+    
+    </association> -->
+  </resultMap>
+  
+  <resultMap id="JoinHouseHolderResultMap" type="com.paopao.hzgzf.modules.pay.entity.GzfAccount" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+    <result column="cust_id" property="custId" jdbcType="VARCHAR" />
+    <result column="account_type" property="accountType" jdbcType="CHAR" />
+    <result column="pay_method" property="payMethod" jdbcType="CHAR" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="account_credit" property="accountCredit" jdbcType="INTEGER" />
+    <result column="phone_no" property="phoneNo" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="op_id" property="opId" jdbcType="INTEGER" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="cycle_end_day" property="cycleEndDay" jdbcType="INTEGER" />
+    <result column="update_by" property="updateBy.id" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy.id" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    
+    <association property="houseHolder" javaType="com.paopao.hzgzf.modules.gzf.entity.GzfHouseholdInfo" 
+    	select="com.paopao.hzgzf.modules.gzf.dao.GzfHouseholdInfoDao.get" column="cust_id">
+    
+    </association>
+    
+     <association property="balances" javaType="com.paopao.hzgzf.modules.pay.entity.GzfAccountBalance" 
+    	select="com.paopao.hzgzf.modules.pay.dao.GzfAccountBalanceMapper.getBalancesByAccountId" column="id">
+    
+    </association>
+    
+     <association property="payments" javaType="com.paopao.hzgzf.modules.pay.entity.GzfPayment" 
+    	select="com.paopao.hzgzf.modules.pay.dao.GzfPaymentMapper.getPaymentByAccountId" column="id">
+    
+    </association>
+  </resultMap>
+  
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, account_name, cust_id, account_type, pay_method, state, account_credit, phone_no, 
+    create_date, update_date, op_id, remarks, cycle_end_day, update_by, create_by, del_flag
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccountExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from gzf_account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from gzf_account
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from gzf_account
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccountExample" >
+    delete from gzf_account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccount" >
+    insert into gzf_account (id, account_name, cust_id, 
+      account_type, pay_method, state, 
+      account_credit, phone_no, create_date, 
+      update_date, op_id, remarks, 
+      cycle_end_day, update_by, create_by, 
+      del_flag)
+    values (#{id,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, #{custId,jdbcType=VARCHAR}, 
+      #{accountType,jdbcType=CHAR}, #{payMethod,jdbcType=CHAR}, #{state,jdbcType=CHAR}, 
+      #{accountCredit,jdbcType=INTEGER}, #{phoneNo,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP}, #{opId,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, 
+      #{cycleEndDay,jdbcType=INTEGER}, #{updateBy.id,jdbcType=VARCHAR}, #{createBy.id,jdbcType=VARCHAR}, 
+      #{delFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccount" >
+    insert into gzf_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="accountName != null" >
+        account_name,
+      </if>
+      <if test="custId != null" >
+        cust_id,
+      </if>
+      <if test="accountType != null" >
+        account_type,
+      </if>
+      <if test="payMethod != null" >
+        pay_method,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="accountCredit != null" >
+        account_credit,
+      </if>
+      <if test="phoneNo != null" >
+        phone_no,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="opId != null" >
+        op_id,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="cycleEndDay != null" >
+        cycle_end_day,
+      </if>
+      <if test="updateBy.id != null" >
+        update_by,
+      </if>
+      <if test="createBy.id != null" >
+        create_by,
+      </if>
+      <if test="delFlag != null" >
+        del_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null" >
+        #{custId,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null" >
+        #{accountType,jdbcType=CHAR},
+      </if>
+      <if test="payMethod != null" >
+        #{payMethod,jdbcType=CHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="accountCredit != null" >
+        #{accountCredit,jdbcType=INTEGER},
+      </if>
+      <if test="phoneNo != null" >
+        #{phoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opId != null" >
+        #{opId,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="cycleEndDay != null" >
+        #{cycleEndDay,jdbcType=INTEGER},
+      </if>
+      <if test="updateBy.id != null" >
+        #{updateBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy.id != null" >
+        #{createBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccountExample" resultType="java.lang.Integer" >
+    select count(*) from gzf_account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update gzf_account
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountName != null" >
+        account_name = #{record.accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custId != null" >
+        cust_id = #{record.custId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountType != null" >
+        account_type = #{record.accountType,jdbcType=CHAR},
+      </if>
+      <if test="record.payMethod != null" >
+        pay_method = #{record.payMethod,jdbcType=CHAR},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state,jdbcType=CHAR},
+      </if>
+      <if test="record.accountCredit != null" >
+        account_credit = #{record.accountCredit,jdbcType=INTEGER},
+      </if>
+      <if test="record.phoneNo != null" >
+        phone_no = #{record.phoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null" >
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateDate != null" >
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.opId != null" >
+        op_id = #{record.opId,jdbcType=INTEGER},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cycleEndDay != null" >
+        cycle_end_day = #{record.cycleEndDay,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateBy.id != null" >
+        update_by = #{record.updateBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createBy.id != null" >
+        create_by = #{record.createBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlag != null" >
+        del_flag = #{record.delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update gzf_account
+    set id = #{record.id,jdbcType=VARCHAR},
+      account_name = #{record.accountName,jdbcType=VARCHAR},
+      cust_id = #{record.custId,jdbcType=VARCHAR},
+      account_type = #{record.accountType,jdbcType=CHAR},
+      pay_method = #{record.payMethod,jdbcType=CHAR},
+      state = #{record.state,jdbcType=CHAR},
+      account_credit = #{record.accountCredit,jdbcType=INTEGER},
+      phone_no = #{record.phoneNo,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      op_id = #{record.opId,jdbcType=INTEGER},
+      remarks = #{record.remarks,jdbcType=VARCHAR},
+      cycle_end_day = #{record.cycleEndDay,jdbcType=INTEGER},
+      update_by = #{record.updateBy.id,jdbcType=VARCHAR},
+      create_by = #{record.createBy.id,jdbcType=VARCHAR},
+      del_flag = #{record.delFlag,jdbcType=CHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccount" >
+    update gzf_account
+    <set >
+      <if test="accountName != null" >
+        account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null" >
+        cust_id = #{custId,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null" >
+        account_type = #{accountType,jdbcType=CHAR},
+      </if>
+      <if test="payMethod != null" >
+        pay_method = #{payMethod,jdbcType=CHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="accountCredit != null" >
+        account_credit = #{accountCredit,jdbcType=INTEGER},
+      </if>
+      <if test="phoneNo != null" >
+        phone_no = #{phoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="opId != null" >
+        op_id = #{opId,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="cycleEndDay != null" >
+        cycle_end_day = #{cycleEndDay,jdbcType=INTEGER},
+      </if>
+      <if test="updateBy != null and updateBy.id != null" >
+        update_by = #{updateBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null and createBy.id != null" >
+        create_by = #{createBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        del_flag = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfAccount" >
+    update gzf_account
+    set account_name = #{accountName,jdbcType=VARCHAR},
+      cust_id = #{custId,jdbcType=VARCHAR},
+      account_type = #{accountType,jdbcType=CHAR},
+      pay_method = #{payMethod,jdbcType=CHAR},
+      state = #{state,jdbcType=CHAR},
+      account_credit = #{accountCredit,jdbcType=INTEGER},
+      phone_no = #{phoneNo,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      op_id = #{opId,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      cycle_end_day = #{cycleEndDay,jdbcType=INTEGER},
+      update_by = #{updateBy.id,jdbcType=VARCHAR},
+      create_by = #{createBy.id,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=CHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  	<sql id="Where" >
+          <if test="phoneNo != null" >
+       			and phone_no = #{phoneNo,jdbcType=VARCHAR}
+   		  </if>
+	      <if test="accountName != null" >
+	        	and account_name = #{accountName,jdbcType=VARCHAR}
+	      </if>
+	      <if test="custId != null" >
+	        	and cust_id = #{custId,jdbcType=VARCHAR}
+	      </if>
+	</sql>
+
+  <sql id="gzfAccountHousePersonJoins">
+    left join gzf_house_person b on a.id = b.account_id
+    left join gzf_house_info c on b.gzf_house_info_id = c.id
+  </sql>
+  
+  <select id="get" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAccount">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_account a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAccount">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_account a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<include refid="Where"></include>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfAccount">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_account a
+        <include refid="gzfAccountHousePersonJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+          <if test="palacesIdList != null">
+            AND c.gzf_palaces_id IN
+            <foreach collection="palacesIdList" open="(" close=")" index="index" item="item" separator=",">
+              #{item,jdbcType=VARCHAR}
+            </foreach>
+          </if>
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="delete">
+		UPDATE gzf_account SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+</mapper>

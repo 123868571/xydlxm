@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfHousePersonDao">
+    
+	<sql id="gzfHousePersonColumns">
+		a.id AS "id",
+		a.gzf_house_info_id AS "gzfHouseInfoId",
+		a.gzf_household_info_id AS "gzfHouseholdInfoId",
+		a.review AS "review",
+		a.bind AS "bind",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.effective_date AS "effectiveDate",
+		a.del_flag AS "delFlag",
+		a.account_id as accountId,
+		a.checkout_date AS "checkoutDate",
+		a.water AS "water",
+		a.elec AS "elec",
+		a.gas AS "gas",
+		a.device AS "device",
+		a.device_remarks AS "deviceRemarks",
+		a.destroy AS "destroy",
+		a.apply AS "apply",
+		a.sync AS "sync",
+		a.water_order AS "waterOrder",
+		a.water_photo AS "waterPhoto",
+		a.elec_order AS "elecOrder",
+		a.elec_photo AS "elecPhoto",
+		a.gas_order AS "gasOrder",
+		a.gas_photo AS "gasPhoto",
+		a.auditRemarks AS "auditRemarks",
+		a.checkoutStatus AS "checkoutStatus",
+		
+		u.name AS "updateBy.name",
+		
+		
+		h.id AS "gzfHouseholdInfo.id",
+		h.name AS "gzfHouseholdInfo.name",
+		h.sex AS "gzfHouseholdInfo.sex",
+		h.company AS "gzfHouseholdInfo.company",
+		h.industry AS "gzfHouseholdInfo.industry",
+		h.work_time AS "gzfHouseholdInfo.workTime",
+		h.province AS "gzfHouseholdInfo.province",
+		h.city AS "gzfHouseholdInfo.city",
+		h.area AS "gzfHouseholdInfo.area",
+		h.address AS "gzfHouseholdInfo.address",
+		h.education AS "gzfHouseholdInfo.education",
+		h.job_category AS "gzfHouseholdInfo.jobCategory",
+		h.household AS "gzfHouseholdInfo.household",
+		h.income_range AS "gzfHouseholdInfo.incomeRange",
+		h.phone AS "gzfHouseholdInfo.phone",
+		h.cardid AS "gzfHouseholdInfo.cardid",
+		h.age AS "gzfHouseholdInfo.age",
+		h.native_province AS "gzfHouseholdInfo.nativeProvince",
+		h.native_city AS "gzfHouseholdInfo.nativeCity",
+		h.native_area AS "gzfHouseholdInfo.nativeArea",
+		h.native_address AS "gzfHouseholdInfo.nativeAddress",
+		h.emergency_contact AS "gzfHouseholdInfo.emergencyContact",
+		h.emergency_phone AS "gzfHouseholdInfo.emergencyPhone",
+		h.cardnum AS "gzfHouseholdInfo.cardnum",
+		h.code AS "gzfHouseholdInfo.code",
+		h.gzf_payment_standard_id AS "gzfHouseholdInfo.gzf_payment_standard_id",
+		
+		i.id AS "gzfHouseInfo.id",
+		i.build_num AS "gzfHouseInfo.buildNum",
+		i.unit AS "gzfHouseInfo.unit",
+		i.room AS "gzfHouseInfo.room",
+		i.inner_area AS "gzfHouseInfo.innerArea",
+		i.use_area AS "gzfHouseInfo.useArea",
+		i.house_type AS "gzfHouseInfo.houseType",
+		i.house_stat AS "gzfHouseInfo.houseStat",
+		i.gzf_palaces_id AS "gzfHouseInfo.gzf_palaces_id",
+		i.code AS "gzfHouseInfo.code",
+
+		p.gzf_village_id AS "gzfHouseInfo.gzfPalaces.gzfVillageId",
+		p.name AS "gzfHouseInfo.gzfPalaces.name",
+		v.name AS "gzfHouseInfo.gzfPalaces.gzfVillage.name"
+		
+	</sql>
+	
+	<sql id="gzfHousePersonJoins">
+	left join sys_user u on u.id = a.update_by
+	left join gzf_household_info h on h.id = a.gzf_household_info_id
+	left join gzf_house_info i on i.id = a.gzf_house_info_id
+	left join gzf_palaces p on p.id = i.gzf_palaces_id
+	left join gzf_village v on v.id = p.gzf_village_id
+	</sql>
+    
+	<select id="get" resultType="GzfHousePerson">
+		SELECT 
+			<include refid="gzfHousePersonColumns"/>
+		FROM gzf_house_person a
+		<include refid="gzfHousePersonJoins"/>
+		WHERE a.del_flag = 0 and a.id = #{id}
+	</select>
+	
+	<select id="getByHistory" resultType="GzfHousePerson">
+		SELECT 
+			<include refid="gzfHousePersonColumns"/>
+		FROM gzf_house_person a
+		<include refid="gzfHousePersonJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="query" resultType="GzfHousePerson">
+		SELECT 
+			<include refid="gzfHousePersonColumns"/>
+		FROM gzf_house_person a
+		<include refid="gzfHousePersonJoins"/>
+		WHERE a.del_flag = 0 and a.gzf_household_Info_id = #{gzfHouseholdInfoId}
+		<if test="bind != null and bind != ''">
+			And a.bind = #{bind}
+		</if>
+	</select>
+	
+	<select id="query1" resultType="GzfHousePerson">
+		SELECT 
+			<include refid="gzfHousePersonColumns"/>
+		FROM gzf_house_person a
+		<include refid="gzfHousePersonJoins"/>
+		WHERE a.del_flag = 0 and a.gzf_house_Info_id = #{gzfHouseInfoId}
+		 <if test="bind != null and bind != ''">
+			And a.bind = #{bind}
+		</if>
+	</select>
+	
+	<select id="findList" resultType="GzfHousePerson">
+		SELECT 
+			<include refid="gzfHousePersonColumns"/>
+		FROM gzf_house_person a
+		<include refid="gzfHousePersonJoins"/>
+		<where>
+			1=1
+			<if test="del == 0">
+				AND a.del_flag = 0
+			</if>
+			<if test="bind != null and bind != ''">
+			And a.bind = #{bind}
+			</if>
+			<if test="review != null and review != ''">
+			AND a.review = #{review}
+			</if>
+			<if test="gzfHouseInfoId != null and gzfHouseInfoId != ''">
+			AND a.gzf_house_info_id = #{gzfHouseInfoId}
+			</if>
+			<if test="gzfHouseholdInfoId != null and gzfHouseholdInfoId != ''">
+			AND a.gzf_household_info_id = #{gzfHouseholdInfoId}
+			</if>
+			<if test="checkoutStatus != null">
+			AND a.checkoutStatus = #{checkoutStatus}
+			</if>
+			<if test="allSelect != null and allSelect != ''">
+			AND concat(v.name,h.name,h.phone,h.cardid) like '%${allSelect}%'
+			</if>
+			<if test="newSelect != null and newSelect != ''">
+			AND concat(i.room,h.name,h.phone,h.cardid) like '%${newSelect}%'
+			</if>
+			<if test="startTime != null">
+			AND a.start_date &gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+			AND a.end_date &lt;= #{endTime}
+			</if>
+			<if test="newAllSelect != null and newAllSelect != ''">
+			AND concat(h.name,h.phone,h.cardid) like '%${newAllSelect}%'
+			</if>
+			<if test="education != null and education != 0">
+				AND h.education = '${education}'
+			</if>
+			<if test="sex != null">
+				AND h.sex = '${sex}'
+			</if>
+			<if test="jobCategory != null and jobCategory != 0">
+				AND h.job_category = '${jobCategory}'
+			</if>
+			<if test="palacesIds != null">
+				AND i.gzf_palaces_id IN
+				<foreach collection="palacesIds" open="(" close=")" index="index" item="item" separator=",">
+					#{item,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+			<if test="endRentDate != null and endRentDate != ''">
+				AND a.checkout_date &gt;= #{endRentDate}
+			</if>
+			<if test="endRentEndDate != null and endRentEndDate != ''">
+				AND a.checkout_date &lt;= #{endRentEndDate}
+			</if>
+			<if test="startRentEndDate != null and startRentEndDate != ''">
+				AND a.start_date &lt;= #{startRentEndDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfHousePerson">
+		SELECT 
+			<include refid="gzfHousePersonColumns"/>
+		FROM gzf_house_person a
+		<include refid="gzfHousePersonJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_house_person(
+			id,
+			gzf_house_info_id,
+			gzf_household_info_id,
+			review,
+			bind,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			start_date,
+			end_date,
+			effective_date,
+			account_id
+		) VALUES (
+			#{id},
+			#{gzfHouseInfoId},
+			#{gzfHouseholdInfoId},
+			#{review},
+			#{bind},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{startDate},
+			#{endDate},
+			#{effectiveDate},
+			#{accountId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_house_person SET 	
+			gzf_house_info_id = #{gzfHouseInfoId},
+			gzf_household_info_id = #{gzfHouseholdInfoId},
+			review = #{review},
+			bind = #{bind},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			start_date = #{startDate},
+			end_date = #{endDate},
+			effective_date = #{effectiveDate},
+			remarks = #{remarks},
+			checkout_date =#{checkoutDate},
+		    water =#{water},
+			elec =#{elec},
+			gas =#{gas},
+			device =#{device},
+			device_remarks =#{deviceRemarks},
+			destroy =#{destroy},
+			apply =#{apply},
+			sync =#{sync},
+			account_id = #{accountId},
+			water_order = #{waterOrder},
+			water_photo = #{waterPhoto},
+			elec_order = #{elecOrder},
+			elec_photo = #{elecPhoto},
+			gas_order = #{gasOrder},
+			gas_photo = #{gasPhoto},
+			auditRemarks = #{auditRemarks},
+			checkoutStatus =#{checkoutStatus}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gzf_house_person SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

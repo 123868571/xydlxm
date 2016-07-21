@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.dlj.dao.ComClientBasicInfoDao">
+    
+	<sql id="comClientBasicInfoColumns">
+		a.id AS "id",
+		a.area_id AS "area.id",
+		a.client_name AS "clientName",
+		a.archive_no AS "archiveNo",
+		a.card_id AS "cardId",
+		a.address AS "address",
+		a.estate_license AS "estateLicense",
+		a.issuing_authority AS "issuingAuthority",
+		a.operator_name AS "operatorName",
+		a.operator_card_id AS "operatorCardId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.update_by as "updateBy.id",
+		a.op_id AS "opId",
+		a.del_flag AS "delFlag",
+		a.remark AS "remark",
+		a2.name AS "area.name"
+	</sql>
+	
+	<sql id="comClientBasicInfoJoins">
+		LEFT JOIN sys_area a2 ON a2.id = a.area_id
+	</sql>
+    
+	<select id="get" resultType="ComClientBasicInfo">
+		SELECT 
+			<include refid="comClientBasicInfoColumns"/>
+		FROM com_client_basic_info a
+		<include refid="comClientBasicInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ComClientBasicInfo">
+		SELECT 
+			<include refid="comClientBasicInfoColumns"/>
+		FROM com_client_basic_info a
+		<include refid="comClientBasicInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="area != null and area.id != null and area.id != ''">
+				AND a.area_id = #{area.id}
+			</if>
+			<if test="clientName != null and clientName != ''">
+				AND a.client_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{clientName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{clientName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{clientName},'%')</if>
+			</if>
+			<if test="archiveNo != null and archiveNo != ''">
+				AND a.archive_no LIKE 
+					<if test="dbName == 'oracle'">'%'||#{archiveNo}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{archiveNo}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{archiveNo},'%')</if>
+			</if>
+			<if test="cardId != null and cardId != ''">
+				AND a.card_id LIKE 
+					<if test="dbName == 'oracle'">'%'||#{cardId}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{cardId}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{cardId},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ComClientBasicInfo">
+		SELECT 
+			<include refid="comClientBasicInfoColumns"/>
+		FROM com_client_basic_info a
+		<include refid="comClientBasicInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO com_client_basic_info(
+			id,
+			area_id,
+			client_name,
+			archive_no,
+			card_id,
+			address,
+			estate_license,
+			issuing_authority,
+			operator_name,
+			operator_card_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			op_id,
+			del_flag,
+			remark
+		) VALUES (
+			#{id},
+			#{area.id},
+			#{clientName},
+			#{archiveNo},
+			#{cardId},
+			#{address},
+			#{estateLicense},
+			#{issuingAuthority},
+			#{operatorName},
+			#{operatorCardId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{opId},
+			#{delFlag},
+			#{remark}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE com_client_basic_info SET 	
+			area_id = #{area.id},
+			client_name = #{clientName},
+			archive_no = #{archiveNo},
+			card_id = #{cardId},
+			address = #{address},
+			estate_license = #{estateLicense},
+			issuing_authority = #{issuingAuthority},
+			operator_name = #{operatorName},
+			operator_card_id = #{operatorCardId},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			op_id = #{opId},
+			remark = #{remark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE com_client_basic_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.pay.dao.GzfAccountHisDao">
+    
+	<sql id="gzfAccountHisColumns">
+		a.id AS "id",
+		a.account_id AS "accountId",
+		a.account_name AS "accountName",
+		a.cust_id AS "custId",
+		a.account_type AS "accountType",
+		a.pay_method AS "payMethod",
+		a.state AS "state",
+		a.account_credit AS "accountCredit",
+		a.phone_no AS "phoneNo",
+		a.cardID AS "cardid",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.op_id AS "opId",
+		a.remarks AS "remarks",
+		a.cycle_end_day AS "cycleEndDay",
+		a.update_by AS "updateBy.id",
+		a.create_by AS "createBy.id",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="gzfAccountHisJoins">
+	</sql>
+    
+	<select id="get" resultType="GzfAccountHis">
+		SELECT 
+			<include refid="gzfAccountHisColumns"/>
+		FROM gzf_account_his a
+		<include refid="gzfAccountHisJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfAccountHis">
+		SELECT 
+			<include refid="gzfAccountHisColumns"/>
+		FROM gzf_account_his a
+		<include refid="gzfAccountHisJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfAccountHis">
+		SELECT 
+			<include refid="gzfAccountHisColumns"/>
+		FROM gzf_account_his a
+		<include refid="gzfAccountHisJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_account_his(
+			id,
+			account_id,
+			account_name,
+			cust_id,
+			account_type,
+			pay_method,
+			state,
+			account_credit,
+			phone_no,
+			cardID,
+			create_date,
+			update_date,
+			op_id,
+			remarks,
+			cycle_end_day,
+			update_by,
+			create_by,
+			del_flag
+		) VALUES (
+			#{id},
+			#{accountId},
+			#{accountName},
+			#{custId},
+			#{accountType},
+			#{payMethod},
+			#{state},
+			#{accountCredit},
+			#{phoneNo},
+			#{cardid},
+			#{createDate},
+			#{updateDate},
+			#{opId},
+			#{remarks},
+			#{cycleEndDay},
+			#{updateBy.id},
+			#{createBy.id},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_account_his SET 	
+			account_id = #{accountId},
+			account_name = #{accountName},
+			cust_id = #{custId},
+			account_type = #{accountType},
+			pay_method = #{payMethod},
+			state = #{state},
+			account_credit = #{accountCredit},
+			phone_no = #{phoneNo},
+			cardID = #{cardid},
+			update_date = #{updateDate},
+			op_id = #{opId},
+			remarks = #{remarks},
+			cycle_end_day = #{cycleEndDay},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gzf_account_his SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

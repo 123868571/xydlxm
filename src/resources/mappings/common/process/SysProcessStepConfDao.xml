@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.common.process.dao.SysProcessStepConfDao">
+    
+	<sql id="sysProcessStepConfColumns">
+		a.id AS "id",
+		a.process_type AS "processType",
+		a.step AS "step",
+		a.step_name AS "stepName",
+		a.roll_id AS "rollId",
+		a.remark AS "remark",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="sysProcessStepConfJoins">
+	</sql>
+    
+	<select id="get" resultType="SysProcessStepConf">
+		SELECT 
+			<include refid="sysProcessStepConfColumns"/>
+		FROM sys_process_step_conf a
+		<include refid="sysProcessStepConfJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="SysProcessStepConf">
+		SELECT 
+			<include refid="sysProcessStepConfColumns"/>
+		FROM sys_process_step_conf a
+		<include refid="sysProcessStepConfJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="processType != null and processType != ''">
+				AND a.process_type LIKE 
+					<if test="dbName == 'oracle'">'%'||#{processType}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{processType}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{processType},'%')</if>
+			</if>
+			<if test="stepName != null and stepName != ''">
+				AND a.step_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{stepName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{stepName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{stepName},'%')</if>
+			</if>
+			<if test="rollId != null and rollId != ''">
+				AND a.roll_id = #{rollId}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="SysProcessStepConf">
+		SELECT 
+			<include refid="sysProcessStepConfColumns"/>
+		FROM sys_process_step_conf a
+		<include refid="sysProcessStepConfJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO sys_process_step_conf(
+			id,
+			process_type,
+			step,
+			step_name,
+			roll_id,
+			remark,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{processType},
+			#{step},
+			#{stepName},
+			#{rollId},
+			#{remark},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_process_step_conf SET 	
+			process_type = #{processType},
+			step = #{step},
+			step_name = #{stepName},
+			roll_id = #{rollId},
+			remark = #{remark},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE sys_process_step_conf SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

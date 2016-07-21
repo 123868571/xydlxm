@@ -1,0 +1,701 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.paopao.hzgzf.modules.pay.dao.GzfPaymentMapper" >
+  <resultMap id="BaseResultMap" type="com.paopao.hzgzf.modules.pay.entity.GzfPayment" >
+    <id column="order_code" property="orderCode" jdbcType="VARCHAR" />
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="account_balance_id" property="accountBalanceId" jdbcType="VARCHAR" />
+    <result column="account_id" property="accountId" jdbcType="VARCHAR" />
+    <result column="external_seq" property="externalSeq" jdbcType="VARCHAR" />
+    <result column="pri_pay_log_id" property="priPayLogId" jdbcType="VARCHAR" />
+    <result column="bank_id" property="bankId" jdbcType="VARCHAR" />
+    <result column="payment_type" property="paymentType" jdbcType="CHAR" />
+    <result column="pay_method" property="payMethod" jdbcType="CHAR" />
+    <result column="certificate_type" property="certificateType" jdbcType="CHAR" />
+    <result column="certificate_code" property="certificateCode" jdbcType="VARCHAR" />
+    <result column="owe_fee" property="oweFee" jdbcType="INTEGER" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="balance_type_id" property="balanceTypeId" jdbcType="INTEGER" />
+    <result column="spe_payment_id" property="spePaymentId" jdbcType="INTEGER" />
+    <result column="effect_date" property="effectDate" jdbcType="TIMESTAMP" />
+    <result column="expire_date" property="expireDate" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy.id" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="pay_date" property="payDate" jdbcType="TIMESTAMP" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="photo" property="photo" jdbcType="VARCHAR" />
+    <result column="payment_order_id" property="paymentOrderId" jdbcType="VARCHAR" />
+    <result column="opt_code" property="optCode" jdbcType="VARCHAR" />
+    <result column="transfer_id" property="transferId" jdbcType="VARCHAR" />
+    <result column="channel_type" property="channelType" jdbcType="VARCHAR" />
+    <result column="phone_no" property="phoneNo" jdbcType="VARCHAR" />
+    <result column="cust_id" property="custId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, order_code, account_balance_id, account_id, external_seq, pri_pay_log_id, bank_id, payment_type, 
+    pay_method, certificate_type, certificate_code, owe_fee, amount, balance_type_id, 
+    spe_payment_id, effect_date, expire_date, create_by, state, create_date, pay_date, 
+    remarks,photo,payment_order_id,opt_code,transfer_id,channel_type,phone_no,cust_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfPaymentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from gzf_payment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from gzf_payment
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from gzf_payment
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfPaymentExample" >
+    delete from gzf_payment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfPayment" >
+    insert into gzf_payment (id, order_code, account_balance_id, account_id, 
+      external_seq, pri_pay_log_id, bank_id, 
+      payment_type, pay_method, certificate_type, 
+      certificate_code, owe_fee, amount, 
+      balance_type_id, spe_payment_id, effect_date, 
+      expire_date, create_by, state, create_date, pay_date, remarks,photo,
+      payment_order_id,opt_code,transfer_id,channel_type,phone_no,cust_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{orderCode,jdbcType=VARCHAR},#{accountBalanceId,jdbcType=VARCHAR}, #{accountId,jdbcType=VARCHAR}, 
+      #{externalSeq,jdbcType=VARCHAR}, #{priPayLogId,jdbcType=VARCHAR}, #{bankId,jdbcType=VARCHAR}, 
+      #{paymentType,jdbcType=CHAR}, #{payMethod,jdbcType=CHAR}, #{certificateType,jdbcType=CHAR}, 
+      #{certificateCode,jdbcType=VARCHAR}, #{oweFee,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER}, 
+      #{balanceTypeId,jdbcType=INTEGER}, #{spePaymentId,jdbcType=INTEGER}, #{effectDate,jdbcType=TIMESTAMP}, 
+      #{expireDate,jdbcType=TIMESTAMP}, #{createBy.id,jdbcType=VARCHAR}, #{state,jdbcType=CHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{payDate,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR},
+      #{photo,jdbcType=VARCHAR},#{paymentOrderId,jdbcType=VARCHAR},#{optCode,jdbcType=VARCHAR},
+      #{transferId,jdbcType=VARCHAR},#{channelType,jdbcType=VARCHAR},#{phoneNo,jdbcType=VARCHAR},#{custId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfPayment" >
+    insert into gzf_payment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderCode != null" >
+        order_code,
+      </if>
+      <if test="accountBalanceId != null" >
+        account_balance_id,
+      </if>
+      <if test="accountId != null" >
+        account_id,
+      </if>
+      <if test="externalSeq != null" >
+        external_seq,
+      </if>
+      <if test="priPayLogId != null" >
+        pri_pay_log_id,
+      </if>
+      <if test="bankId != null" >
+        bank_id,
+      </if>
+      <if test="paymentType != null" >
+        payment_type,
+      </if>
+      <if test="payMethod != null" >
+        pay_method,
+      </if>
+      <if test="certificateType != null" >
+        certificate_type,
+      </if>
+      <if test="certificateCode != null" >
+        certificate_code,
+      </if>
+      <if test="oweFee != null" >
+        owe_fee,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="balanceTypeId != null" >
+        balance_type_id,
+      </if>
+      <if test="spePaymentId != null" >
+        spe_payment_id,
+      </if>
+      <if test="effectDate != null" >
+        effect_date,
+      </if>
+      <if test="expireDate != null" >
+        expire_date,
+      </if>
+      <if test="createBy.id != null" >
+        create_by,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="payDate != null" >
+        pay_date,
+      </if>
+      <if test="remarks != null" >
+        remarks,
+      </if>
+      <if test="photo != null" >
+        photo,
+      </if>
+      <if test="paymentOrderId != null" >
+        payment_order_id,
+      </if>
+      <if test="optCode != null" >
+        opt_code,
+      </if>
+      <if test="transferId != null" >
+        transfer_id,
+      </if>
+      <if test="channelType != null" >
+        channel_type,
+      </if>
+      <if test="phoneNo != null" >
+        phone_no,
+      </if>
+      <if test="custId != null" >
+        cust_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+       <if test="orderCode != null" >
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="accountBalanceId != null" >
+        #{accountBalanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null" >
+        #{accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="externalSeq != null" >
+        #{externalSeq,jdbcType=VARCHAR},
+      </if>
+      <if test="priPayLogId != null" >
+        #{priPayLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankId != null" >
+        #{bankId,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentType != null" >
+        #{paymentType,jdbcType=CHAR},
+      </if>
+      <if test="payMethod != null" >
+        #{payMethod,jdbcType=CHAR},
+      </if>
+      <if test="certificateType != null" >
+        #{certificateType,jdbcType=CHAR},
+      </if>
+      <if test="certificateCode != null" >
+        #{certificateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="oweFee != null" >
+        #{oweFee,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="balanceTypeId != null" >
+        #{balanceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="spePaymentId != null" >
+        #{spePaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="effectDate != null" >
+        #{effectDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expireDate != null" >
+        #{expireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy.id != null" >
+        #{createBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payDate != null" >
+        #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null" >
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null" >
+        #{photo,jdbcType=VARCHAR},
+      </if>
+       <if test="paymentOrderId != null" >
+        #{paymentOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="optCode != null" >
+        #{optCode,jdbcType=VARCHAR},
+      </if>
+      <if test="transferId != null" >
+        #{transferId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelType != null" >
+        #{channelType,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNo != null" >
+        #{phoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null" >
+        #{custId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfPaymentExample" resultType="java.lang.Integer" >
+    select count(*) from gzf_payment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update gzf_payment
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderCode != null" >
+        id = #{record.orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountBalanceId != null" >
+        account_balance_id = #{record.accountBalanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountId != null" >
+        account_id = #{record.accountId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.externalSeq != null" >
+        external_seq = #{record.externalSeq,jdbcType=VARCHAR},
+      </if>
+      <if test="record.priPayLogId != null" >
+        pri_pay_log_id = #{record.priPayLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankId != null" >
+        bank_id = #{record.bankId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentType != null" >
+        payment_type = #{record.paymentType,jdbcType=CHAR},
+      </if>
+      <if test="record.payMethod != null" >
+        pay_method = #{record.payMethod,jdbcType=CHAR},
+      </if>
+      <if test="record.certificateType != null" >
+        certificate_type = #{record.certificateType,jdbcType=CHAR},
+      </if>
+      <if test="record.certificateCode != null" >
+        certificate_code = #{record.certificateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oweFee != null" >
+        owe_fee = #{record.oweFee,jdbcType=INTEGER},
+      </if>
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=INTEGER},
+      </if>
+      <if test="record.balanceTypeId != null" >
+        balance_type_id = #{record.balanceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.spePaymentId != null" >
+        spe_payment_id = #{record.spePaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.effectDate != null" >
+        effect_date = #{record.effectDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.expireDate != null" >
+        expire_date = #{record.expireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null and record.createBy.id != null">
+        create_by = #{record.createBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state,jdbcType=CHAR},
+      </if>
+      <if test="record.createDate != null" >
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.payDate != null" >
+        pay_date = #{record.payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remarks != null" >
+        remarks = #{record.remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="record.photo != null" >
+        photo = #{record.photo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentOrderId != null" >
+        payment_order_id = #{record.paymentOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.optCode != null" >
+        opt_code = #{record.optCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transferId != null" >
+        transfer_id = #{record.transferId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelType != null" >
+        channel_type = #{record.channelType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phoneNo != null" >
+        phone_no = #{record.phoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custId != null" >
+        cust_id = #{record.custId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update gzf_payment
+    set id = #{record.id,jdbcType=VARCHAR},
+      order_code = #{record.orderCode,jdbcType=VARCHAR},
+      account_balance_id = #{record.accountBalanceId,jdbcType=VARCHAR},
+      account_id = #{record.accountId,jdbcType=VARCHAR},
+      phone_no = #{record.phoneNo,jdbcType=VARCHAR},
+      cust_id = #{record.custId,jdbcType=VARCHAR},
+      external_seq = #{record.externalSeq,jdbcType=VARCHAR},
+      pri_pay_log_id = #{record.priPayLogId,jdbcType=VARCHAR},
+      bank_id = #{record.bankId,jdbcType=VARCHAR},
+      payment_type = #{record.paymentType,jdbcType=CHAR},
+      pay_method = #{record.payMethod,jdbcType=CHAR},
+      certificate_type = #{record.certificateType,jdbcType=CHAR},
+      certificate_code = #{record.certificateCode,jdbcType=VARCHAR},
+      owe_fee = #{record.oweFee,jdbcType=INTEGER},
+      amount = #{record.amount,jdbcType=INTEGER},
+      balance_type_id = #{record.balanceTypeId,jdbcType=INTEGER},
+      spe_payment_id = #{record.spePaymentId,jdbcType=INTEGER},
+      effect_date = #{record.effectDate,jdbcType=TIMESTAMP},
+      expire_date = #{record.expireDate,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy.id,jdbcType=VARCHAR},
+      state = #{record.state,jdbcType=CHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      pay_date = #{record.payDate,jdbcType=TIMESTAMP},
+      remarks = #{record.remarks,jdbcType=VARCHAR},
+      photo = #{record.photo,jdbcType=VARCHAR},
+      payment_order_id = #{record.paymentOrderId,jdbcType=VARCHAR},
+      opt_code = #{record.optCode,jdbcType=VARCHAR},
+      transfer_id = #{record.transferId,jdbcType=VARCHAR},
+      channel_type = #{record.channelType,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfPayment" >
+    update gzf_payment
+    <set >
+   	  <if test="orderCode != null" >
+        order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="accountBalanceId != null" >
+        account_balance_id = #{accountBalanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="accountId != null" >
+        account_id = #{accountId,jdbcType=VARCHAR},
+      </if>
+       <if test="phoneNo != null" >
+        phone_no = #{phoneNo,jdbcType=VARCHAR},
+      </if>
+      <if test="custId != null" >
+        cust_id = #{custId,jdbcType=VARCHAR},
+      </if>
+      <if test="externalSeq != null" >
+        external_seq = #{externalSeq,jdbcType=VARCHAR},
+      </if>
+      <if test="priPayLogId != null" >
+        pri_pay_log_id = #{priPayLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankId != null" >
+        bank_id = #{bankId,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentType != null" >
+        payment_type = #{paymentType,jdbcType=CHAR},
+      </if>
+      <if test="payMethod != null" >
+        pay_method = #{payMethod,jdbcType=CHAR},
+      </if>
+      <if test="certificateType != null" >
+        certificate_type = #{certificateType,jdbcType=CHAR},
+      </if>
+      <if test="certificateCode != null" >
+        certificate_code = #{certificateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="oweFee != null" >
+        owe_fee = #{oweFee,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="balanceTypeId != null" >
+        balance_type_id = #{balanceTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="spePaymentId != null" >
+        spe_payment_id = #{spePaymentId,jdbcType=INTEGER},
+      </if>
+      <if test="effectDate != null" >
+        effect_date = #{effectDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="expireDate != null" >
+        expire_date = #{expireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null and createBy.id != null" >
+        create_by = #{createBy.id,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payDate != null" >
+        pay_date = #{payDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null" >
+        remarks = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="photo != null" >
+        #{photo,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentOrderId != null" >
+        payment_order_id = #{paymentOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="optCode != null" >
+        opt_code = #{optCode,jdbcType=VARCHAR},
+      </if>
+      <if test="transferId != null" >
+        transfer_id = #{transferId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelType != null" >
+        channel_type = #{channelType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.paopao.hzgzf.modules.pay.entity.GzfPayment" >
+    update gzf_payment
+    set account_balance_id = #{accountBalanceId,jdbcType=VARCHAR},
+      order_code = #{orderCode,jdbcType=VARCHAR},
+      account_id = #{accountId,jdbcType=VARCHAR},
+      phone_no = #{phoneNo,jdbcType=VARCHAR},
+      cust_id = #{custId,jdbcType=VARCHAR},
+      external_seq = #{externalSeq,jdbcType=VARCHAR},
+      pri_pay_log_id = #{priPayLogId,jdbcType=VARCHAR},
+      bank_id = #{bankId,jdbcType=VARCHAR},
+      payment_type = #{paymentType,jdbcType=CHAR},
+      pay_method = #{payMethod,jdbcType=CHAR},
+      certificate_type = #{certificateType,jdbcType=CHAR},
+      certificate_code = #{certificateCode,jdbcType=VARCHAR},
+      owe_fee = #{oweFee,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=INTEGER},
+      balance_type_id = #{balanceTypeId,jdbcType=INTEGER},
+      spe_payment_id = #{spePaymentId,jdbcType=INTEGER},
+      effect_date = #{effectDate,jdbcType=TIMESTAMP},
+      expire_date = #{expireDate,jdbcType=TIMESTAMP},
+      create_by = #{createBy.id,jdbcType=VARCHAR},
+      state = #{state,jdbcType=CHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      pay_date = #{payDate,jdbcType=TIMESTAMP},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      photo = #{record.photo,jdbcType=VARCHAR},
+      payment_order_id = #{paymentOrderId,jdbcType=VARCHAR},
+      opt_code = #{optCode,jdbcType=VARCHAR},
+      transfer_id = #{transferId,jdbcType=VARCHAR},
+      channel_type = #{channelType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="get" resultType="com.paopao.hzgzf.modules.pay.entity.GzfPayment">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_payment a
+		WHERE a.id = #{id}
+	</select>
+	
+	<sql id="Where">
+		<where >
+	          <if test="accountBalanceId != null" >
+        			and account_balance_id = #{accountBalanceId,jdbcType=VARCHAR}
+      		  </if>
+		      <if test="accountId != null and accountId != ''" >
+		        	and account_id = #{accountId,jdbcType=VARCHAR}
+		      </if>
+		      <if test="phoneNo != null" >
+       			and phone_no = #{phoneNo,jdbcType=VARCHAR}
+   		  	  </if>
+		      <if test="externalSeq != null" >
+		        	and external_seq = #{externalSeq,jdbcType=VARCHAR}
+		      </if>
+		      <if test="priPayLogId != null" >
+		        	and pri_pay_log_id = #{priPayLogId,jdbcType=VARCHAR}
+		      </if>
+		      <if test="bankId != null" >
+		        	and bank_id = #{bankId,jdbcType=VARCHAR}
+		      </if>
+		      <if test="paymentType != null" >
+		        	and payment_type = #{paymentType,jdbcType=CHAR}
+		      </if>
+		      <if test="payMethod != null" >
+		        	and pay_method = #{payMethod,jdbcType=CHAR}
+		      </if>
+		      <if test="certificateType != null" >
+		        	and certificate_type = #{certificateType,jdbcType=CHAR}
+		      </if>
+		      <if test="certificateCode != null" >
+		        	and certificate_code = #{certificateCode,jdbcType=VARCHAR}
+		      </if>
+		      <if test="balanceTypeId != null" >
+		        	and balance_type_id = #{balanceTypeId,jdbcType=INTEGER}
+		      </if>
+		      <if test="spePaymentId != null" >
+		        	and spe_payment_id = #{spePaymentId,jdbcType=INTEGER}
+		      </if>
+		      <if test="optCode != null" >
+		        	and opt_code = #{optCode,jdbcType=VARCHAR}
+		      </if>
+		      <if test="custId != null" >
+		        	and cust_id = #{custId,jdbcType=VARCHAR}
+		      </if>
+		     <!--  <if test="effectDate != null" >
+		        	and effect_date = #{effectDate,jdbcType=TIMESTAMP}
+		      </if>
+		      <if test="expireDate != null" >
+		        	and expire_date = #{expireDate,jdbcType=TIMESTAMP}
+		      </if> -->
+		      <if test="state != null" >
+		        	and state = #{state,jdbcType=CHAR}
+		      </if>
+		      <if test="beginTime != null">
+	  			<!-- and create_date &gt; #{beginTime} -->
+	  			 <![CDATA[ and create_date >= #{beginTime} ]]>
+  				<!-- <![CDATA[ and DATE_FORMAT(create_date, '%Y-%m-%d hh:mi:ss')>=  DATE_FORMAT(#{beginTime}, '%Y-%m-%d hh:mi:ss') ]]> -->
+	  		</if>
+	  		<if test="endTime != null">
+	  			<!--  and create_date &lt; #{endTime} -->
+	  			<![CDATA[ and create_date <= #{endTime} ]]>
+	  			<!-- <![CDATA[ and DATE_FORMAT(create_date, '%Y-%m-%d hh:mi:ss')<=  DATE_FORMAT(#{endTime}, '%Y-%m-%d hh:mi:ss') ]]> -->
+	  		</if>
+	    </where>
+	</sql>
+	
+	<select id="findList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfPayment">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_payment a
+		<include refid="Where"></include>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.paopao.hzgzf.modules.pay.entity.GzfPayment">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_payment a
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="delete">
+		delete from gzf_payment 
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getPaymentByAccountId" parameterType="java.lang.String" resultType="com.paopao.hzgzf.modules.pay.entity.GzfPayment">
+		select 
+		<include refid="Base_Column_List"></include>
+		from gzf_payment a where account_id=#{account_id}
+	</select>
+</mapper>

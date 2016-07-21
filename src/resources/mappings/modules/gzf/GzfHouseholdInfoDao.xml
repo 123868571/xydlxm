@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfHouseholdInfoDao">
+    
+	<sql id="gzfHouseholdInfoColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.sex AS "sex",
+		a.company AS "company",
+		a.industry AS "industry",
+		a.work_time AS "workTime",
+		a.province AS "province",
+		a.city AS "city",
+		a.area AS "area",
+		a.address AS "address",
+		a.education AS "education",
+		a.job_category AS "jobCategory",
+		a.household AS "household",
+		a.income_range AS "incomeRange",
+		a.phone AS "phone",
+		a.cardid AS "cardid",
+		a.age AS "age",
+		a.sync AS "sync",
+		a.native_province AS "nativeProvince",
+		a.native_city AS "nativeCity",
+		a.native_area AS "nativeArea",
+		a.native_address AS "nativeAddress",
+		a.emergency_contact AS "emergencyContact",
+		a.emergency_phone AS "emergencyPhone",
+		a.cardnum AS "cardnum",
+		a.marital_status AS "maritalStatus",
+		a.political_status AS "politicalStatus",
+		a.gzf_payment_standard_id AS "gzfPaymentStandardId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.code AS "code",
+		a.del_flag AS "delFlag",
+		a.next_step AS "nextStep",
+		a.personal AS "personal",
+		p.id AS "gzfHousePerson.id",
+		p.account_id AS "gzfHousePerson.accountId",
+		s.name AS "gzfPaymentStandard.name"
+	</sql>
+	
+	<sql id="gzfHouseholdInfoJoins">
+	left join (select * from gzf_house_person where del_flag = 0) p on p.gzf_household_info_id = a.id
+	left join gzf_payment_standard s on a.gzf_payment_standard_id = s.id
+	</sql>
+    
+	<select id="get" resultType="GzfHouseholdInfo">
+		SELECT 
+			<include refid="gzfHouseholdInfoColumns"/>
+		FROM gzf_household_info a
+		<include refid="gzfHouseholdInfoJoins"/>
+		WHERE a.del_flag = 0 and a.id = #{id}
+	</select>
+	
+	<select id="getByCardId" resultType="GzfHouseholdInfo">
+		SELECT 
+			<include refid="gzfHouseholdInfoColumns"/>
+		FROM gzf_household_info a
+		<include refid="gzfHouseholdInfoJoins"/>
+		WHERE a.del_flag = 0 and a.cardid = #{cardid}
+	</select>
+	
+	<select id="getByNameAndPhone" resultType="GzfHouseholdInfo">
+		SELECT 
+			<include refid="gzfHouseholdInfoColumns"/>
+		FROM gzf_household_info a
+		<include refid="gzfHouseholdInfoJoins"/>
+		<where>
+			a.del_flag = 0
+			<if test="allName != null and allName != ''">
+			   AND concat(a.name,a.phone) like concat('%',#{allName},'%')
+			</if>
+		</where>
+	</select>
+	
+	<select id="countHousehold" resultType="Integer">
+	    SELECT 
+		  COUNT(0) 
+		FROM
+		  gzf_household_info a 
+		  LEFT JOIN  (SELECT * FROM gzf_house_person WHERE del_flag = 0 ) p  on
+	    a.id = p.gzf_household_info_id
+	    WHERE a.personal = #{personal} and a.next_Step != 1  and p.id is null
+	</select>
+	
+	<select id="findHouseholdList" resultType="GzfHouseholdInfo">
+		 SELECT 
+		  	a.id AS "id",
+			a.name AS "name",
+			a.sex AS "sex",
+			a.company AS "company",
+			a.industry AS "industry",
+			a.work_time AS "workTime",
+			a.province AS "province",
+			a.city AS "city",
+			a.area AS "area",
+			a.address AS "address",
+			a.education AS "education",
+			a.job_category AS "jobCategory",
+			a.household AS "household",
+			a.income_range AS "incomeRange",
+			a.phone AS "phone",
+			a.cardid AS "cardid",
+			a.age AS "age",
+			a.native_province AS "nativeProvince",
+			a.native_city AS "nativeCity",
+			a.native_area AS "nativeArea",
+			a.native_address AS "nativeAddress",
+			a.emergency_contact AS "emergencyContact",
+			a.emergency_phone AS "emergencyPhone",
+			a.cardnum AS "cardnum",
+			a.marital_status AS "maritalStatus",
+			a.political_status AS "politicalStatus",
+			a.gzf_payment_standard_id AS "gzfPaymentStandardId",
+			a.create_by AS "createBy.id",
+			a.create_date AS "createDate",
+			a.update_by AS "updateBy.id",
+			a.update_date AS "updateDate",
+			a.remarks AS "remarks",
+			a.code AS "code",
+			a.del_flag AS "delFlag",
+			a.next_step AS "nextStep",
+			a.personal AS "personal" 
+		FROM
+		  gzf_household_info a 
+		  LEFT JOIN  (SELECT * FROM gzf_house_person WHERE del_flag = 0 ) p  on
+	    a.id = p.gzf_household_info_id
+	    WHERE a.next_Step != 1  and p.id is null
+	</select>
+	
+	<select id="getByEntity" resultType="GzfHouseholdInfo">
+		SELECT 
+			<include refid="gzfHouseholdInfoColumns"/>
+		FROM gzf_household_info a
+		<include refid="gzfHouseholdInfoJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}   and a.name = #{name} and a.phone = #{phone}
+	</select>
+	
+	<select id="findList" resultType="GzfHouseholdInfo">
+		SELECT 
+			<include refid="gzfHouseholdInfoColumns"/>
+		FROM gzf_household_info a
+		<include refid="gzfHouseholdInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="allName != null and allName != ''">
+			   AND concat(a.name,a.phone,a.cardid) like concat('%',#{allName},'%')
+			</if>
+			<if test="gzfHousePerson.review != null and gzfHousePerson.review != ''">
+			   And p.review = #{gzfHousePerson.review}
+			</if>
+			<if test="gzfHousePerson.bind != null and gzfHousePerson.bind != ''">
+				And	p.bind = #{gzfHousePerson.bind}
+			</if>
+			<if test="phone != null and phone != ''">
+			   AND a.phone like concat('%',#{phone},'%')
+			</if>
+			<if test="cardid != null and cardid != ''">
+			   AND a.cardid like concat('%',#{cardid},'%')
+			</if>
+			<choose>
+				<when test="nextStep != null and nextStep == 1">
+					AND a.next_Step = 1
+				</when>
+				<otherwise>
+					AND a.next_Step != 1
+				</otherwise>
+			</choose>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfHouseholdInfo">
+		SELECT 
+			<include refid="gzfHouseholdInfoColumns"/>
+		FROM gzf_household_info a
+		<include refid="gzfHouseholdInfoJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_household_info(
+			id,
+			name,
+			sex,
+			company,
+			industry,
+			work_time,
+			province,
+			city,
+			area,
+			address,
+			education,
+			job_category,
+			household,
+			income_range,
+			phone,
+			cardid,
+			age,
+			native_province,
+			native_city,
+			native_area,
+			native_address,
+			emergency_contact,
+			emergency_phone,
+			cardnum,
+			marital_status,
+			political_status,
+			gzf_payment_standard_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{sex},
+			#{company},
+			#{industry},
+			#{workTime},
+			#{province},
+			#{city},
+			#{area},
+			#{address},
+			#{education},
+			#{jobCategory},
+			#{household},
+			#{incomeRange},
+			#{phone},
+			#{cardid},
+			#{age},
+			#{nativeProvince},
+			#{nativeCity},
+			#{nativeArea},
+			#{nativeAddress},
+			#{emergencyContact},
+			#{emergencyPhone},
+			#{cardnum},
+			#{maritalStatus},
+			#{politicalStatus},
+			#{gzfPaymentStandardId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_household_info SET 	
+			name = #{name},
+			sex = #{sex},
+			company = #{company},
+			industry = #{industry},
+			work_time = #{workTime},
+			province = #{province},
+			city = #{city},
+			area = #{area},
+			address = #{address},
+			education = #{education},
+			job_category = #{jobCategory},
+			household = #{household},
+			income_range = #{incomeRange},
+			phone = #{phone},
+			cardid = #{cardid},
+			age = #{age},
+			native_province = #{nativeProvince},
+			native_city = #{nativeCity},
+			native_area = #{nativeArea},
+			native_address = #{nativeAddress},
+			emergency_contact = #{emergencyContact},
+			emergency_phone = #{emergencyPhone},
+			cardnum = #{cardnum},
+			marital_status = #{maritalStatus},
+			political_status = #{politicalStatus},
+			gzf_payment_standard_id = #{gzfPaymentStandardId},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			sync = #{sync},
+			next_step = #{nextStep},
+			personal = #{personal},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE gzf_household_info SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

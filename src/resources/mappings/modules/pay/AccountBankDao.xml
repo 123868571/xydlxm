@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.paopao.hzgzf.modules.pay.dao.AccountBankDao" >
+  <resultMap id="BaseResultMap" type="com.paopao.hzgzf.modules.pay.entity.AccountBank" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+    <result column="cust_id" property="custId" jdbcType="VARCHAR" />
+    <result column="account_type" property="accountType" jdbcType="CHAR" />
+    <result column="pay_method" property="payMethod" jdbcType="CHAR" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="account_credit" property="accountCredit" jdbcType="INTEGER" />
+    <result column="phone_no" property="phoneNo" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
+    <result column="op_id" property="opId" jdbcType="INTEGER" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="cycle_end_day" property="cycleEndDay" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    <result column="acct_item_type" property="bindAcctItemType" jdbcType="BLOB" />
+    <result column="card_no" property="cardNo" jdbcType="VARCHAR" />
+    <result column="bank_id" property="bankId" jdbcType="VARCHAR" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List">
+  	a.id, a.account_name, a.cust_id, a.account_type, a.pay_method, a.state, a.account_credit, a.phone_no, 
+    a.create_date, a.update_date, a.op_id, a.remarks, a.cycle_end_day, a.del_flag, b.acct_item_type, b.card_no,
+    b.bank_id, b.bank_name
+  </sql>
+  	<sql id="Where" >
+  			a.del_flag = #{DEL_FLAG_NORMAL}
+          <if test="phoneNo != null and phoneNo != ''" >
+       			and phone_no = #{phoneNo,jdbcType=VARCHAR}
+   		  </if>
+	      <if test="accountName != null and accountName != ''" >
+	        	and account_name = #{accountName,jdbcType=VARCHAR}
+	      </if>
+	</sql>
+	
+	<sql id="leftJoinBank">
+		left join (SELECT GROUP_CONCAT(acct_item_type_id) AS acct_item_type,account_id, card_no,bank_id,bank_name FROM gzf_bank_card WHERE del_flag='0' GROUP BY account_id,card_no) b on a.id=b.account_id
+	</sql>
+  
+  <select id="get" resultType="com.paopao.hzgzf.modules.pay.entity.AccountBank">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_account a 
+			<include refid="leftJoinBank" />
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} and a.id = #{id} 
+		</where>
+	</select>
+	
+	<select id="findList" resultType="com.paopao.hzgzf.modules.pay.entity.AccountBank">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_account a 
+			<include refid="leftJoinBank" />
+		<where>
+			<include refid="Where"></include>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="com.paopao.hzgzf.modules.pay.entity.AccountBank">
+		SELECT 
+			<include refid="Base_Column_List" />
+		FROM gzf_account a  
+			<include refid="leftJoinBank" />
+		<where>
+			<include refid="Where"></include>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+</mapper>

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.gzf.dao.GzfRepairManagementDao">
+    
+	<sql id="gzfRepairManagementColumns">
+		a.id AS "id",
+		a.repair_num AS "repairNum",
+		a.time AS "time",
+		a.gzf_house_info_id AS "gzfHouseInfoId",
+		a.gzf_household_info_id AS "gzfHouseholdInfoId",
+		a.name AS "name",
+		a.phone AS "phone",
+		a.content AS "content",
+		a.maintenance_id AS "maintenanceId",
+		a.gzfPalacesId AS "gzfPalacesId",
+		a.gzfVillage AS "gzfVillage",
+		a.houseInfo AS "houseInfo",
+		a.repairTime AS "repairTime",
+		a.confirmTime AS "confirmTime",
+		a.confirmPerson AS "confirmPerson",
+		a.confirmRemarks AS "confirmRemarks",
+		a.process_status AS "processStatus",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.repair_Type AS "repairType",
+		
+		hi.id AS "gzfHouseInfo.id",
+		hi.build_num AS "gzfHouseInfo.buildNum",
+		hi.unit AS "gzfHouseInfo.unit",
+		hi.room AS "gzfHouseInfo.room",
+		hi.inner_area AS "gzfHouseInfo.innerArea",
+		hi.use_area AS "gzfHouseInfo.useArea",
+		hi.house_type AS "gzfHouseInfo.houseType",
+		hi.house_stat AS "gzfHouseInfo.houseStat",
+		
+		b.gzf_village_id AS "gzfHouseInfo.gzfPalaces.gzfVillageId",
+		b.name AS "gzfHouseInfo.gzfPalaces.name",
+		c.name AS "gzfHouseInfo.gzfPalaces.gzfVillage.name",
+		
+		d.name AS "gzfRepairProject.name"
+		
+	</sql>
+
+	<sql id="gzfRepairManagementColumnsWithProject">
+		a.id AS "id",
+		a.repair_num AS "repairNum",
+		a.time AS "time",
+		a.gzf_house_info_id AS "gzfHouseInfoId",
+		a.gzf_household_info_id AS "gzfHouseholdInfoId",
+		a.name AS "name",
+		a.phone AS "phone",
+		a.content AS "content",
+		a.maintenance_id AS "maintenanceId",
+		a.gzfPalacesId AS "gzfPalacesId",
+		a.gzfVillage AS "gzfVillage",
+		a.houseInfo AS "houseInfo",
+		a.repairTime AS "repairTime",
+		a.confirmTime AS "confirmTime",
+		a.confirmPerson AS "confirmPerson",
+		a.confirmRemarks AS "confirmRemarks",
+
+		hi.id AS "gzfHouseInfo.id",
+		hi.build_num AS "gzfHouseInfo.buildNum",
+		hi.unit AS "gzfHouseInfo.unit",
+		hi.room AS "gzfHouseInfo.room",
+		hi.inner_area AS "gzfHouseInfo.innerArea",
+		hi.use_area AS "gzfHouseInfo.useArea",
+		hi.house_type AS "gzfHouseInfo.houseType",
+		hi.house_stat AS "gzfHouseInfo.houseStat",
+
+		b.gzf_village_id AS "gzfHouseInfo.gzfPalaces.gzfVillageId",
+		b.name AS "gzfHouseInfo.gzfPalaces.name",
+		c.name AS "gzfHouseInfo.gzfPalaces.gzfVillage.name",
+
+		d.id AS "gzfRepairProject.id",
+		d.name AS "gzfRepairProject.name"
+	</sql>
+	
+	<sql id="gzfRepairManagementJoins">
+		left join gzf_house_info hi on hi.id = a.gzf_house_info_id
+		left join gzf_household_info h on h.id = a.gzf_household_info_id
+		left join gzf_palaces b on b.id = hi.gzf_palaces_id
+		left join gzf_village c on c.id = b.gzf_village_id 
+		left join gzf_repair_project d on d.id = a.repair_type
+	</sql>
+
+	<sql id="gzfRepairManagementAndProjectJoins">
+		left join gzf_house_info hi on hi.id = a.gzf_house_info_id
+		left join gzf_household_info h on h.id = a.gzf_household_info_id
+		left join gzf_palaces b on b.id = hi.gzf_palaces_id
+		left join gzf_village c on c.id = b.gzf_village_id
+		left join gzf_repair_project d on d.id = a.repair_type
+	</sql>
+    
+	<select id="get" resultType="GzfRepairManagement">
+		SELECT 
+			<include refid="gzfRepairManagementColumns"/>
+		FROM gzf_repair_management a
+		<include refid="gzfRepairManagementJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="GzfRepairManagement">
+		SELECT 
+			<include refid="gzfRepairManagementColumns"/>
+		FROM gzf_repair_management a
+		<include refid="gzfRepairManagementJoins"/>
+		<where>
+
+			<if test="time != null and time != ''">
+				AND a.time = #{time}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.time &gt;= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.time &lt;= #{endDate}
+			</if>
+			<if test="allSelect != null and allSelect != ''">
+				AND concat(hi.room,h.name,a.phone) like "%${allSelect}%"
+			</if>
+			<if test="gzfHouseInfoId != null and gzfHouseInfoId != ''">
+				AND a.gzf_house_info_id = #{gzfHouseInfoId}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+			<if test="maintenanceId != null and maintenanceId != ''">
+				AND a.maintenance_id = #{maintenanceId}
+			</if>
+			<if test="processStatus != null and processStatus != ''">
+				AND a.process_Status = #{processStatus}
+			</if>
+			<if test="repairType != null and repairType != ''">
+				AND a.repair_type = #{repairType}
+			</if>
+			<if test="palacesIds != null">
+				AND a.gzfPalacesId IN
+				<foreach collection="palacesIds" open="(" close=")" index="index" item="item" separator=",">
+					#{item,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="GzfRepairManagement">
+		SELECT 
+			<include refid="gzfRepairManagementColumns"/>
+		FROM gzf_repair_management a
+		<include refid="gzfRepairManagementJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListWithProject" resultType="GzfRepairManagement">
+		SELECT
+		<include refid="gzfRepairManagementColumnsWithProject"/>
+		FROM gzf_repair_management a
+		<include refid="gzfRepairManagementAndProjectJoins"/>
+		<where>
+
+			<if test="repairTypeStr != null and repairTypeStr != ''">
+				AND a.repair_type like "%${repairTypeStr}%"
+			</if>
+			<if test="time != null and time != ''">
+				AND a.time = #{time}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND a.time &gt;= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND a.time &lt;= #{endDate}
+			</if>
+			<if test="allSelect != null and allSelect != ''">
+				AND concat(a.name,a.phone) like "%${allSelect}%"
+			</if>
+			<if test="gzfHouseInfoId != null and gzfHouseInfoId != ''">
+				AND a.gzf_house_info_id = #{gzfHouseInfoId}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND a.phone = #{phone}
+			</if>
+			<if test="maintenanceId != null and maintenanceId != ''">
+				AND a.maintenance_id = #{maintenanceId}
+			</if>
+			<if test="palacesIds != null">
+				AND a.gzfPalacesId IN
+				<foreach collection="palacesIds" open="(" close=")" index="index" item="item" separator=",">
+					#{item,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+			<if test="projectIds != null">
+				AND d.id IN
+				<foreach collection="projectIds" open="(" close=")" index="index" item="item" separator=",">
+					#{item,jdbcType=VARCHAR}
+				</foreach>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO gzf_repair_management(
+			id,
+			repair_num,
+			time,
+			gzf_house_info_id,
+			gzf_household_info_id,
+			name,
+			phone,
+			content,
+			maintenance_id,
+			gzfPalacesId,
+			gzfVillage,
+			repair_room,
+			confirmTime,
+		    confirmPerson,
+		    confirmRemarks,
+		    process_status,
+		    create_by,
+			create_date,
+			update_by,
+			update_date,
+			repair_type,
+			houseInfo
+		) VALUES (
+			#{id},
+			#{repairNum},
+			#{time},
+			#{gzfHouseInfoId},
+			#{gzfHouseholdInfoId},
+			#{name},
+			#{phone},
+			#{content},
+			#{maintenanceId},
+			#{gzfPalacesId},
+			#{gzfVillage},
+			#{repairRoom},
+			#{confirmTime},
+		    #{confirmPerson},
+		    #{confirmRemarks},
+		    #{processStatus},
+		    #{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{repairType},
+			#{houseInfo}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE gzf_repair_management SET 	
+			repair_num = #{repairNum},
+			time = #{time},
+			gzf_house_info_id = #{gzfHouseInfoId},
+			gzf_household_info_id = #{gzfHouseholdInfoId},
+			name = #{name},
+			phone = #{phone},
+			content = #{content},
+			maintenance_id = #{maintenanceId},
+			gzfPalacesId = #{gzfPalacesId},
+			gzfVillage =#{gzfVillage},
+			repair_room = #{repairRoom},
+			confirmTime = #{confirmTime},
+		    confirmPerson =#{confirmPerson},
+		    confirmRemarks =#{confirmRemarks},
+		    process_status =#{processStatus},
+		    update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			repair_type = #{repairType},
+			houseInfo =#{houseInfo}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM gzf_repair_management
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

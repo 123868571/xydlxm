@@ -10,6 +10,8 @@
 		a.name,
 		a.sort,
 		a.type,
+		a.photo,
+		a.introduction,
 		a.remarks,
 		a.create_by AS "createBy.id",
 		a.create_date,
@@ -74,7 +76,9 @@
 			create_by, 
 			create_date, 
 			update_by, 
-			update_date, 
+			update_date,
+			photo,
+			introduction,
 			remarks, 
 			del_flag
 		) VALUES (
@@ -88,7 +92,9 @@
 			#{createBy.id}, 
 			#{createDate}, 
 			#{updateBy.id}, 
-			#{updateDate}, 
+			#{updateDate},
+			#{photo},
+			#{introduction},
 			#{remarks}, 
 			#{delFlag}
 		)
@@ -103,7 +109,9 @@
 			sort = #{sort}, 
 			type = #{type}, 
 			update_by = #{updateBy.id}, 
-			update_date = #{updateDate}, 
+			update_date = #{updateDate},
+			photo = #{photo},
+			introduction = #{introduction},
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>

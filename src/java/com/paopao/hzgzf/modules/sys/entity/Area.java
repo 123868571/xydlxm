@@ -21,6 +21,9 @@ public class Area extends TreeEntity<Area> {
 //	private String name; 	// 区域名称
 //	private Integer sort;		// 排序
 	private String type; 	// 区域类型（1：国家；2：省份、直辖市；3：地市；4：区县）
+	private String photo;   // 房屋缩略图
+	private String introduction;  //简介
+
 	
 	public Area(){
 		super();
@@ -88,6 +91,26 @@ public class Area extends TreeEntity<Area> {
 //	public String getParentId() {
 //		return parent != null && parent.getId() != null ? parent.getId() : "0";
 //	}
+
+	@Length(min = 0, max = 255, message = "区域缩略图长度必须介于 0 和 255 之间")
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+
+	@Length(min = 0, max = 255, message = "简介长度必须介于 0 和 255 之间")
+	public String getIntroduction() {
+		return introduction;
+	}
+
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
+
 	
 	@Override
 	public String toString() {

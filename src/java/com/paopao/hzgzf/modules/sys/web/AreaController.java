@@ -3,11 +3,14 @@
  */
 package com.paopao.hzgzf.modules.sys.web;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.paopao.hzgzf.common.config.Global;
+import com.paopao.hzgzf.common.utils.StringUtils;
+import com.paopao.hzgzf.common.web.BaseController;
+import com.paopao.hzgzf.modules.sys.entity.Area;
+import com.paopao.hzgzf.modules.sys.service.AreaService;
+import com.paopao.hzgzf.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,14 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.paopao.hzgzf.common.config.Global;
-import com.paopao.hzgzf.common.utils.StringUtils;
-import com.paopao.hzgzf.common.web.BaseController;
-import com.paopao.hzgzf.modules.sys.entity.Area;
-import com.paopao.hzgzf.modules.sys.service.AreaService;
-import com.paopao.hzgzf.modules.sys.utils.UserUtils;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 区域Controller

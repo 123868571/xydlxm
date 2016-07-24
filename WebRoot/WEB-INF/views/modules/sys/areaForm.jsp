@@ -62,6 +62,19 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">区域缩略图:</label>
+			<div class="controls">
+				<form:hidden id="nameImage" path="photo" htmlEscape="false" maxlength="255" class="input-xlarge" />
+				<sys:ckfinder input="nameImage" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="100" maxHeight="100"/>
+			</div>
+		</div>
+		<div class="control-group">
+		<label class="control-label">简介:</label>
+		<div class="controls">
+			<form:textarea path="introduction" htmlEscape="false" rows="3" maxlength="200" class="input-xlarge"/>
+		</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">备注:</label>
 			<div class="controls">
 				<form:textarea path="remarks" htmlEscape="false" rows="3" maxlength="200" class="input-xlarge"/>

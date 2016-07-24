@@ -146,13 +146,25 @@
                                 <c:forEach var="item" items="${areaList}" varStatus="s">
                                     <c:if test="${s.index % 6 eq 0}">
                                     <tr class="odd gradeX">
-                                        <td id="area-${item.id}-td"><a id="area-${item.id}" data-id="${item.id}" class="area-control" href="javascript:">${item.name}</a></td>
+                                        <td id="area-${item.id}-td" >
+                                            <a id="area-${item.id}" data-id="${item.id}" class="area-control" href="javascript:">${item.name}</a>
+                                            <img class="thumbnail" src="${item.photo}" alt="区域缩略图" />
+                                                ${item.introduction}
+                                        </td>
                                     </c:if>
                                     <c:if test="${s.index % 6 ge 1 and s.index % 6 lt 5}">
-                                        <td id="area-${item.id}-td"><a id="area-${item.id}" data-id="${item.id}" class="area-control" href="javascript:">${item.name}</a></td>
+                                        <td id="area-${item.id}-td" >
+                                            <a id="area-${item.id}" data-id="${item.id}" class="area-control" href="javascript:">${item.name}</a>
+                                            <img class="thumbnail" src="${item.photo}" alt="区域缩略图" />
+                                                ${item.introduction}
+                                        </td>
                                     </c:if>
                                     <c:if test="${s.index % 6 eq 5}">
-                                        <td id="area-${item.id}-td"><a id="area-${item.id}" data-id="${item.id}" class="area-control" href="javascript:">${item.name}</a></td>
+                                        <td id="area-${item.id}-td" >
+                                            <a id="area-${item.id}" data-id="${item.id}" class="area-control" href="javascript:">${item.name}</a>
+                                            <img class="thumbnail" src="${item.photo}" alt="区域缩略图" />
+                                                ${item.introduction}
+                                        </td>
                                     </tr>
                                     </c:if>
                                 </c:forEach>
@@ -1231,6 +1243,14 @@
                                 }
                                 tbody += "<td id='area-" + item.id + "-td'><a id='area-" + item.id + "' data-id='" +
                                 item.id + "' class='area-control' href='javascript:'>" + item.name + "</a>";
+
+                                if(item.photo!=undefined && $.trim(item.photo)!="" && item.photo!=null ){
+                                    tbody += "<img class='thumbnail' src='"+item.photo+"' alt='区域缩略图' />";
+                                }
+                                if(item.introduction!=undefined && $.trim(item.introduction)!="" && item.introduction!=null ){
+                                    tbody += item.introduction;
+                                }
+
                                 if (i % 6 == 5 || i == data.length - 1){
                                     tbody += "</td></tr>";
                                 }else {

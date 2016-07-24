@@ -1,0 +1,169 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<html>
+<head>
+  <title>居民生活用电表管理</title>
+  <meta name="decorator" content="default"/>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      //$("#name").focus();
+      $("#inputForm").validate({
+        submitHandler: function(form){
+          loading('正在提交，请稍等...');
+          form.submit();
+        },
+        errorContainer: "#messageBox",
+        errorPlacement: function(error, element) {
+          $("#messageBox").text("输入有误，请先更正。");
+          if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
+            error.appendTo(element.parent().parent());
+          } else {
+            error.insertAfter(element);
+          }
+        }
+      });
+      //$("#btnApply").click()
+    });
+  </script>
+</head>
+<body>
+  <ul class="nav nav-tabs">
+    <li><a href="${ctx}/dlj/comResidentElecApply/">居民生活用电表列表</a></li>
+    <li class="active"><a href="${ctx}/dlj/comResidentElecApply/form?id=${comResidentElecApply.id}">居民生活用电表<shiro:hasPermission name="dlj:comResidentElecApply:edit">${not empty comResidentElecApply.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="dlj:comResidentElecApply:edit">查看</shiro:lacksPermission></a></li>
+  </ul><br/>
+  <form:form id="inputForm" modelAttribute="comResidentElecApply" action="${ctx}/dlj/comResidentElecApply/save" method="post" class="form-horizontal">
+    <form:hidden path="id"/>
+    <sys:message content="${message}"/>    
+    <div class="control-group">
+      <label class="control-label">地区：</label>
+      <div class="controls">
+        <sys:treeselect id="area" name="area.id" value="${comResidentElecApply.area.id}" labelName="area.name" labelValue="${comResidentElecApply.area.name}"
+          title="区域" url="/sys/area/treeData" cssClass="" allowClear="true" notAllowSelectParent="true"/>
+      </div>
+    </div>
+    <div class="control-group hide">
+      <label class="control-label">申请编号：</label>
+      <div class="controls">
+        <form:input path="serial" htmlEscape="false" maxlength="32" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group hide">
+      <label class="control-label">客户编号：</label>
+      <div class="controls">
+        <form:input path="custNo" htmlEscape="false" maxlength="32" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">客户姓名：</label>
+      <div class="controls">
+        <form:input path="name" htmlEscape="false" maxlength="200" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">身份证：</label>
+      <div class="controls">
+        <form:input path="cardId" htmlEscape="false" maxlength="20" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">用电地址：</label>
+      <div class="controls">
+        <form:input path="address" htmlEscape="false" maxlength="500" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">房产证编号：</label>
+      <div class="controls">
+        <form:input path="estateLicense" htmlEscape="false" maxlength="200" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">发证机关：</label>
+      <div class="controls">
+        <form:input path="issuingAuthority" htmlEscape="false" maxlength="500" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">经办人：</label>
+      <div class="controls">
+        <form:input path="operatorName" htmlEscape="false" maxlength="200" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">经办人身份证号：</label>
+      <div class="controls">
+        <form:input path="operatorCardId" htmlEscape="false" maxlength="20" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">供电及计费方式：</label>
+      <div class="controls">
+        <form:radiobuttons path="elecType" items="${fns:getDictList('elec_type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">容量：</label>
+      <div class="controls">
+        <form:input path="capacity" htmlEscape="false" maxlength="50" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">电费支付方式：</label>
+      <div class="controls">
+        <form:radiobuttons path="payType" items="${fns:getDictList('pay_type')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">电费尾款归整：</label>
+      <div class="controls">
+        <form:radiobuttons path="payWraping" items="${fns:getDictList('pay_wraping')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">联系人：</label>
+      <div class="controls">
+        <form:input path="linkName" htmlEscape="false" maxlength="200" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">联系电话：</label>
+      <div class="controls">
+        <form:input path="linkTel" htmlEscape="false" maxlength="50" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group hide">
+      <label class="control-label">check_status：</label>
+      <div class="controls">
+        <form:input path="checkStatus" htmlEscape="false" maxlength="10" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group hide">
+      <label class="control-label">check_content：</label>
+      <div class="controls">
+        <form:input path="checkContent" htmlEscape="false" maxlength="500" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group hide">
+      <label class="control-label">op_id：</label>
+      <div class="controls">
+        <form:input path="opId" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">备注：</label>
+      <div class="controls">
+        <form:textarea path="remark" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+      </div>
+    </div>
+    <div class="form-actions">
+      <shiro:hasPermission name="dlj:comResidentElecApply:edit">
+        <input id="btnSubmit" class="btn btn-info" type="submit" value="保 存"/>&nbsp;
+        <c:if test="${comResidentElecApply.checkStatus eq '0'}">
+          <input id="btnApply" class="btn btn-info" type="button" value="提 交"/>&nbsp;
+        </c:if>
+        </shiro:hasPermission>
+      <input id="btnCancel" class="btn btn-info" type="button" value="返 回" onclick="history.go(-1)"/>
+    </div>
+  </form:form>
+</body>
+</html>

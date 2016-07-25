@@ -94,6 +94,8 @@
     	oa.name AS "office.area.name",
     	oa.parent_id AS "office.area.parent.id",
     	oa.parent_ids AS "office.area.parentIds",
+		oa.photo AS "office.area.photo",
+		oa.introduction AS "office.area.introduction",
     	cu.id AS "company.primaryPerson.id",
     	cu.name AS "company.primaryPerson.name",
     	cu2.id AS "company.deputyPerson.id",

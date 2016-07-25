@@ -147,7 +147,7 @@
                                 <tr class="odd gradeX">
                                     <td id="area-${areaList.id}-td" >
                                         <span style="font-size:18px;font-weight:400">${areaList.name}</span>
-                                        <a id="area-${areaList.id}" data-id="${areaList.id}" class="area-control" href="javascript:">更多介绍</a>
+                                        <a class="area-control" href="${ctx}/gzf/gzfHouseInfo/detail?id=${areaList.id}">更多介绍</a>
                                         <img class="thumbnail" src="${areaList.photo}" alt="区域缩略图" />
                                         ${areaList.introduction}
                                     </td>

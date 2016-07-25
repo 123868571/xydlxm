@@ -8,6 +8,7 @@ import com.google.common.collect.Maps;
 import com.paopao.hzgzf.common.config.Global;
 import com.paopao.hzgzf.common.utils.StringUtils;
 import com.paopao.hzgzf.common.web.BaseController;
+import com.paopao.hzgzf.modules.gzf.entity.GzfHousePerson;
 import com.paopao.hzgzf.modules.sys.entity.Area;
 import com.paopao.hzgzf.modules.sys.service.AreaService;
 import com.paopao.hzgzf.modules.sys.utils.UserUtils;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +77,26 @@ public class AreaController extends BaseController {
 //		}
 		model.addAttribute("area", area);
 		return "modules/sys/areaForm";
+	}
+
+	@RequiresPermissions("sys:sysAreaInfo:view")
+	@RequestMapping(value = "detail")
+	public String detail(Area area,
+						 HttpServletRequest request, HttpServletResponse response, Model model) {
+		if (area != null) {
+			if (!area.getId().isEmpty()) {
+				Area gzfhp = new Area();
+				if (gzfhp != null) {
+					gzfhp = areaService.get();
+
+				}
+			}
+		}
+
+		model.addAttribute("sysAreaInfo", area == null ? new Area() : gzfhhi);
+
+
+		return "modules/sys/areaInformation";
 	}
 	
 	@RequiresPermissions("sys:area:edit")

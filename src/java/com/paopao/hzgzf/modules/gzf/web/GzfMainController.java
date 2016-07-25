@@ -40,7 +40,7 @@ import java.util.*;
 /**
  * Created by FastLane on 2016-01-10.
  * <p/>
- * Á≥ªÁªüÂêéÂè∞È¶ñÈ°µ
+ * œµÕ≥∫ÛÃ® ◊“≥
  */
 @Controller
 @RequestMapping(value = "${adminPath}/gzf/main")
@@ -82,7 +82,10 @@ public class GzfMainController extends BaseController {
         User user = UserUtils.getUser();
 
         // area
-        List<Area> areaList = getAreaListByPid("1");
+//        List<Area> areaList = getAreaListByPid("1");
+
+        Area areaList = user.getOffice().getArea();
+
         model.addAttribute("areaList", areaList);
 
         String villageId = request.getParameter("villageId");
@@ -96,13 +99,13 @@ public class GzfMainController extends BaseController {
         // basic report
         List<MainBaseReportBO> mainBaseReportBOs;
         Object object = EhCacheUtils.get(ReportDictConstant.DICT_CACHE_REPORT,
-          ReportDictConstant.DICT_CACHE_KEY_MAIN_BASE_REPORT);
+                ReportDictConstant.DICT_CACHE_KEY_MAIN_BASE_REPORT);
 
         if (object == null || isFlushCache) {
             mainBaseReportBOs =
-              mainBaseReport(villageId, palacesId, startDate, endDate);
+                    mainBaseReport(villageId, palacesId, startDate, endDate);
             EhCacheUtils.put(ReportDictConstant.DICT_CACHE_REPORT,
-              ReportDictConstant.DICT_CACHE_KEY_MAIN_BASE_REPORT, mainBaseReportBOs);
+                    ReportDictConstant.DICT_CACHE_KEY_MAIN_BASE_REPORT, mainBaseReportBOs);
         } else {
             mainBaseReportBOs = (List<MainBaseReportBO>) object;
         }
@@ -111,11 +114,11 @@ public class GzfMainController extends BaseController {
         // Rent
         ReportBO rentReport;
         object = EhCacheUtils.get(ReportDictConstant.DICT_CACHE_REPORT,
-          ReportDictConstant.DICT_CACHE_KEY_RENT_REPORT);
+                ReportDictConstant.DICT_CACHE_KEY_RENT_REPORT);
         if (object == null || isFlushCache) {
             rentReport = getRentReport(villageId, palacesId, startDate, endDate);
             EhCacheUtils.put(ReportDictConstant.DICT_CACHE_REPORT,
-              ReportDictConstant.DICT_CACHE_KEY_RENT_REPORT, rentReport);
+                    ReportDictConstant.DICT_CACHE_KEY_RENT_REPORT, rentReport);
         } else {
             rentReport = (ReportBO) object;
         }
@@ -124,11 +127,11 @@ public class GzfMainController extends BaseController {
         // Property
         ReportBO propertyReport;
         object = EhCacheUtils.get(ReportDictConstant.DICT_CACHE_REPORT,
-          ReportDictConstant.DICT_CACHE_KEY_PROPERTY_REPORT);
+                ReportDictConstant.DICT_CACHE_KEY_PROPERTY_REPORT);
         if (object == null || isFlushCache) {
             propertyReport = getPropertyReport(villageId, palacesId, startDate, endDate);
             EhCacheUtils.put(ReportDictConstant.DICT_CACHE_REPORT,
-              ReportDictConstant.DICT_CACHE_KEY_PROPERTY_REPORT, propertyReport);
+                    ReportDictConstant.DICT_CACHE_KEY_PROPERTY_REPORT, propertyReport);
         } else {
             propertyReport = (ReportBO) object;
         }
@@ -137,11 +140,11 @@ public class GzfMainController extends BaseController {
         // Water&Electricity
         ReportBO waterAndElecReport;
         object = EhCacheUtils.get(ReportDictConstant.DICT_CACHE_REPORT,
-          ReportDictConstant.DICT_CACHE_KEY_WATER_ELECTIC_REPORT);
+                ReportDictConstant.DICT_CACHE_KEY_WATER_ELECTIC_REPORT);
         if (object == null || isFlushCache) {
             waterAndElecReport = getWaterAndElecReport(villageId, palacesId, startDate, endDate);
             EhCacheUtils.put(ReportDictConstant.DICT_CACHE_REPORT,
-              ReportDictConstant.DICT_CACHE_KEY_WATER_ELECTIC_REPORT, waterAndElecReport);
+                    ReportDictConstant.DICT_CACHE_KEY_WATER_ELECTIC_REPORT, waterAndElecReport);
         } else {
             waterAndElecReport = (ReportBO) object;
         }
@@ -166,7 +169,7 @@ public class GzfMainController extends BaseController {
     }
 
     public List<MainBaseReportBO> mainBaseReport(String villageId, String palacesId,
-      String startDate, String endDate) {
+                                                 String startDate, String endDate) {
 
         List<String> palacesIds = new ArrayList<>();
         if (palacesId != null && !palacesId.equals("0")) {
@@ -192,14 +195,14 @@ public class GzfMainController extends BaseController {
         List<MainBaseReportBO> result = new ArrayList<>();
 
         String houseKey = "home";
-        String houseTitle = "ÊÄªÊàøÂ±ãÊï∞";
+        String houseTitle = "◊‹∑øŒ› ˝";
         String houseValue = "";
         String houseClassName = "blue";
         String houseUrl = "/gzf/gzfReport/house";
         MainBaseReportBO houseReport = new MainBaseReportBO(houseKey, houseTitle, houseValue,
-          houseClassName, houseUrl);
+                houseClassName, houseUrl);
         List<GzfHouseInfo> houseList =
-          gzfHouseInfoService.findAllList(null, startDate, endDate, palacesIds, null, null);
+                gzfHouseInfoService.findAllList(null, startDate, endDate, palacesIds, null, null);
         if (houseList.size() == 0) {
             houseList.add(null);
         }
@@ -207,12 +210,12 @@ public class GzfMainController extends BaseController {
         result.add(houseReport);
 
         String personKey = "group";
-        String personTitle = "ÂÖ•‰Ωè‰∫∫Âëò1";
+        String personTitle = "»Î◊°»À‘±1";
         String personValue = "";
         String personClassName = "green";
         String personUrl = "/gzf/gzfReport/person";
         MainBaseReportBO personReport = new MainBaseReportBO(personKey, personTitle, personValue,
-          personClassName, personUrl);
+                personClassName, personUrl);
         GzfHousePerson gzfHousePerson = new GzfHousePerson();
         gzfHousePerson.setPalacesIds(palacesIds);
         if (startDate != null) {
@@ -242,9 +245,9 @@ public class GzfMainController extends BaseController {
         int totalNotFeeAccount = 0;
         Page<GzfAccount> pageAccount = new Page<>();
         List<FeeReportVO> reportVOs = feeReport(palacesId, villageId, startDate,
-          endDate,
-          pageAccount,
-          PaymentConst.ACCT_ITEM_TYPE.HOUSE_RENT, "");
+                endDate,
+                pageAccount,
+                PaymentConst.ACCT_ITEM_TYPE.HOUSE_RENT, "");
         Iterator<FeeReportVO> iterator = reportVOs.iterator();
         int i = 0;
         while (iterator.hasNext()) {
@@ -260,29 +263,29 @@ public class GzfMainController extends BaseController {
             i++;
         }
         String houseFeeRateKey = "jpy";
-        String houseFeeRateTitle = "ÊàøÁßüÁº¥Ë¥πÁéá1";
+        String houseFeeRateTitle = "∑ø◊‚Ω…∑—¬ 1";
         String houseFeeRateValue;
         if (totalAccount == 0) {
             houseFeeRateValue = "0.00";
         } else {
             houseFeeRateValue = String.format("%.2f",
-              (float) ((totalAccount - totalNotFeeAccount) * 100 / totalAccount)) + "%";
+                    (float) ((totalAccount - totalNotFeeAccount) * 100 / totalAccount)) + "%";
         }
         String houseFeeRateClassName = "purple";
         String houseFeeUrl = "/gzf/gzfReport/fee";
         MainBaseReportBO houseFeeRateReport = new MainBaseReportBO(houseFeeRateKey,
-          houseFeeRateTitle, houseFeeRateValue, houseFeeRateClassName, houseFeeUrl);
+                houseFeeRateTitle, houseFeeRateValue, houseFeeRateClassName, houseFeeUrl);
         result.add(houseFeeRateReport);
 
         String houseRateKey = "bar-chart";
-        String houseRateTitle = "ÊàøÂ±ãÂá∫ÁßüÁéá";
+        String houseRateTitle = "∑øŒ›≥ˆ◊‚¬ ";
         String houseRateValue = String.format("%.1f",
-          (float) (personList.size() * 100 / houseList.size()))
-          + "%";
+                (float) (personList.size() * 100 / houseList.size()))
+                + "%";
         String houseRateClassName = "yellow";
         String houseRateUrl = "/gzf/gzfReport/house";
         MainBaseReportBO houseRateReport = new MainBaseReportBO(houseRateKey, houseRateTitle,
-          houseRateValue, houseRateClassName, houseRateUrl);
+                houseRateValue, houseRateClassName, houseRateUrl);
         result.add(houseRateReport);
 
         return result;
@@ -322,15 +325,15 @@ public class GzfMainController extends BaseController {
     }
 
     public ReportBO getRentReport(String villageId, String palacesId,
-      String startDate, String endDate) {
-        ReportBO reportBOs = new ReportBO("ÊàøÁßüÁº¥Ë¥π", "rent", "89");
+                                  String startDate, String endDate) {
+        ReportBO reportBOs = new ReportBO("∑ø◊‚Ω…∑—", "rent", "89");
         int totalAccount = 0;
         int totalNotFeeAccount = 0;
         Page<GzfAccount> pageAccount = new Page<>();
         List<FeeReportVO> reportVOs = feeReport(palacesId, villageId, startDate,
-          endDate,
-          pageAccount,
-          PaymentConst.ACCT_ITEM_TYPE.HOUSE_RENT, "");
+                endDate,
+                pageAccount,
+                PaymentConst.ACCT_ITEM_TYPE.HOUSE_RENT, "");
         Iterator<FeeReportVO> iterator = reportVOs.iterator();
         int i = 0;
         while (iterator.hasNext()) {
@@ -350,22 +353,22 @@ public class GzfMainController extends BaseController {
             houseFeeRateValue = "0.00";
         } else {
             houseFeeRateValue = String.format("%.2f",
-              (float) ((totalAccount - totalNotFeeAccount) * 100 / totalAccount));
+                    (float) ((totalAccount - totalNotFeeAccount) * 100 / totalAccount));
         }
         reportBOs.setValue(houseFeeRateValue);
         return reportBOs;
     }
 
     public ReportBO getPropertyReport(String villageId, String palacesId,
-      String startDate, String endDate) {
-        ReportBO reportBOs = new ReportBO("Áâ©‰∏öÁº¥Ë¥π", "rent", "80");
+                                      String startDate, String endDate) {
+        ReportBO reportBOs = new ReportBO("ŒÔ“µΩ…∑—", "rent", "80");
         int totalAccount = 0;
         int totalNotFeeAccount = 0;
         Page<GzfAccount> pageAccount = new Page<>();
         List<FeeReportVO> reportVOs = feeReport(palacesId, villageId, startDate,
-          endDate,
-          pageAccount,
-          PaymentConst.ACCT_ITEM_TYPE.MANAGEMENT, "");
+                endDate,
+                pageAccount,
+                PaymentConst.ACCT_ITEM_TYPE.MANAGEMENT, "");
         Iterator<FeeReportVO> iterator = reportVOs.iterator();
         int i = 0;
         while (iterator.hasNext()) {
@@ -385,22 +388,22 @@ public class GzfMainController extends BaseController {
             houseFeeRateValue = "0.00";
         } else {
             houseFeeRateValue = String.format("%.2f",
-              (float) ((totalAccount - totalNotFeeAccount) * 100 / totalAccount));
+                    (float) ((totalAccount - totalNotFeeAccount) * 100 / totalAccount));
         }
         reportBOs.setValue(houseFeeRateValue);
         return reportBOs;
     }
 
     public ReportBO getWaterAndElecReport(String villageId, String palacesId,
-      String startDate, String endDate) {
-        ReportBO reportBOs = new ReportBO("Ê∞¥ÁîµÁº¥Ë¥π", "rent", "99");
+                                          String startDate, String endDate) {
+        ReportBO reportBOs = new ReportBO("ÀÆµÁΩ…∑—", "rent", "99");
         int totalAccount = 0;
         int totalNotFeeAccount = 0;
         Page<GzfAccount> pageAccount = new Page<>();
         List<FeeReportVO> reportVOs = feeReport(palacesId, villageId, startDate,
-          endDate,
-          pageAccount,
-          PaymentConst.ACCT_ITEM_TYPE.WATER, "");
+                endDate,
+                pageAccount,
+                PaymentConst.ACCT_ITEM_TYPE.WATER, "");
         Iterator<FeeReportVO> iterator = reportVOs.iterator();
         int i = 0;
         while (iterator.hasNext()) {
@@ -420,7 +423,7 @@ public class GzfMainController extends BaseController {
             houseFeeRateValue = "0.00";
         } else {
             houseFeeRateValue = String.format("%.2f",
-              (float) ((totalAccount - totalNotFeeAccount) * 100 / totalAccount));
+                    (float) ((totalAccount - totalNotFeeAccount) * 100 / totalAccount));
         }
         reportBOs.setValue(houseFeeRateValue);
         return reportBOs;
@@ -432,7 +435,7 @@ public class GzfMainController extends BaseController {
     }
 
     /**
-     * Ê†πÊçÆÁ±ªÂûãËé∑ÂèñÁº¥Ë¥πÊï∞ÊçÆ
+     * ∏˘æ›¿‡–ÕªÒ»°Ω…∑— ˝æ›
      *
      * @param palacesId
      * @param villageId
@@ -443,7 +446,7 @@ public class GzfMainController extends BaseController {
      * @return
      */
     public List<FeeReportVO> feeReport(String palacesId, String villageId, String startDate,
-      String endDate, Page<GzfAccount> pageAccount, int type, String title) {
+                                       String endDate, Page<GzfAccount> pageAccount, int type, String title) {
         List<FeeReportVO> result = new ArrayList<>();
         List<GzfVillage> gzfVillageList = gzfVillageService.findAllList(null);
 
@@ -454,10 +457,10 @@ public class GzfMainController extends BaseController {
         Map<String, List<GzfAccount>> rentAccountMap = new HashMap<>();
 
         int extendDay = 15;
-        String key0 = "day_" + extendDay; //  ÂÆΩÈôêÊúü
-        String title0 = "ÂÆΩÈôêÊúüÂÜÖÊú™Áº¥Ë¥π";
+        String key0 = "day_" + extendDay; //  øÌœﬁ∆⁄
+        String title0 = "øÌœﬁ∆⁄ƒ⁄Œ¥Ω…∑—";
 
-        String title1 = "ÂÆΩÈôêÊúüÂ§ñÊú™Áº¥Ë¥π";
+        String title1 = "øÌœﬁ∆⁄Õ‚Œ¥Ω…∑—";
 
         ReportBO reportBO = null;
         List<ReportBO> reportBOs = new ArrayList<>();
@@ -466,13 +469,13 @@ public class GzfMainController extends BaseController {
 
         int byFlag = 0;
         if (palacesId != null && !palacesId.equals("0") && (villageId == null || villageId
-          .equals("0"))) {
-            // ÊåâÁÖßËãëÊù•ÁªüËÆ°ÔºàÊåáÂÆöËãëÔºâ
+                .equals("0"))) {
+            // ∞¥’’‘∑¿¥Õ≥º∆£®÷∏∂®‘∑£©
             byFlag = 1;
             palacesIds.add(palacesId);
         } else {
             if (villageId != null && !villageId.equals("0")) {
-                // ÊåâÁÖßÂ∞èÂå∫Êù•ÁªüËÆ°ÔºàÊâÄÊúâËãëÔºâ
+                // ∞¥’’–°«¯¿¥Õ≥º∆£®À˘”–‘∑£©
                 byFlag = 2;
                 villageIds.add(villageId);
                 List<GzfPalaces> gzfPalacesList = getGzfPalacesByConditions(villageId);
@@ -486,7 +489,7 @@ public class GzfMainController extends BaseController {
                     GzfAccount gzfAccount = new GzfAccount();
                     gzfAccount.setPalacesIdList(palacesIds);
                     Page<GzfAccount> gzfAccountPage =
-                      fee2(gzfAccount, pageAccount, startDate, endDate, type);
+                            fee2(gzfAccount, pageAccount, startDate, endDate, type);
                     List<GzfAccount> gzfAccountList = gzfAccountPage.getList();
                     List<GzfAccount> rentAccountList = new ArrayList<>();
                     Iterator iterator = gzfAccountList.iterator();
@@ -500,7 +503,7 @@ public class GzfMainController extends BaseController {
                     rentAccountMap.put(palacesIdTmp, rentAccountList);
                 }
             } else {
-                // ÊåâÁÖßÊâÄÊúâÂ∞èÂå∫ÔºàÊâÄÊúâÂ∞èÂå∫Ôºâ
+                // ∞¥’’À˘”––°«¯£®À˘”––°«¯£©
                 if (gzfVillageList != null) {
                     Map<String, List<GzfPalaces>> map = new HashMap<>();
                     for (int i = 0; i < gzfVillageList.size(); i++) {
@@ -520,7 +523,7 @@ public class GzfMainController extends BaseController {
                             GzfAccount gzfAccount = new GzfAccount();
                             gzfAccount.setPalacesIdList(gzfPalacesIdListTmp);
                             Page<GzfAccount> gzfAccountPage =
-                              fee2(gzfAccount, pageAccount, startDate, endDate, type);
+                                    fee2(gzfAccount, pageAccount, startDate, endDate, type);
                             gzfAccountList = gzfAccountPage.getList();
                             Iterator iterator = gzfAccountList.iterator();
                             while (iterator.hasNext()) {
@@ -543,8 +546,8 @@ public class GzfMainController extends BaseController {
 
         if (byFlag == 0) {
             reportVO = new FeeReportVO();
-            reportVO.setTitle(title + "Áº¥Ë¥πÊä•Ë°®ÔºàÊåâÂ∞èÂå∫ÁªüËÆ°-ÁÇπÂáªÊü•ÁúãËØ¶ÊÉÖÔºâ");
-            reportVO.setName("Áº¥Ë¥πË¥¶Âè∑ÊÄªÊï∞");
+            reportVO.setTitle(title + "Ω…∑—±®±Ì£®∞¥–°«¯Õ≥º∆-µ„ª˜≤Èø¥œÍ«È£©");
+            reportVO.setName("Ω…∑—’À∫≈◊‹ ˝");
             String[] xAis = new String[totalAccountMap.size()];
             String[] data = new String[totalAccountMap.size()];
             Iterator iter = totalAccountMap.entrySet().iterator();
@@ -563,7 +566,7 @@ public class GzfMainController extends BaseController {
             result.add(reportVO);
 
             reportVO = new FeeReportVO();
-            reportVO.setName("Êú™Áº¥Ë¥πÊÄªÊï∞");
+            reportVO.setName("Œ¥Ω…∑—◊‹ ˝");
             data = new String[rentAccountMap.size()];
             iter = rentAccountMap.entrySet().iterator();
             i = 0;
@@ -573,7 +576,7 @@ public class GzfMainController extends BaseController {
                 data[i] = "" + gzfAccountList.size();
                 i++;
                 for (GzfAccount gzfAccount1 : gzfAccountList) {
-                    // Âà§Êñ≠ÊòØÂê¶Âú®ÂÆΩÈôêÊúüÂÜÖÁº¥Ë¥π
+                    // ≈–∂œ «∑Ò‘⁄øÌœﬁ∆⁄ƒ⁄Ω…∑—
                     if (gzfAccount1.getOverDay() <= extendDay) {
                         extendFeeAccount.add(gzfAccount1);
                     } else if (gzfAccount1.getOverDay() > extendDay) {
@@ -599,8 +602,8 @@ public class GzfMainController extends BaseController {
 
         } else if (byFlag == 2) {
             reportVO = new FeeReportVO();
-            reportVO.setTitle(title + "Áº¥Ë¥πÊä•Ë°®ÔºàÊåâËãëÁªüËÆ°-ÁÇπÂáªÊü•ÁúãËØ¶ÊÉÖÔºâ");
-            reportVO.setName("Áº¥Ë¥πË¥¶Âè∑ÊÄªÊï∞");
+            reportVO.setTitle(title + "Ω…∑—±®±Ì£®∞¥‘∑Õ≥º∆-µ„ª˜≤Èø¥œÍ«È£©");
+            reportVO.setName("Ω…∑—’À∫≈◊‹ ˝");
             String[] xAis = new String[totalAccountMap.size()];
             String[] data = new String[totalAccountMap.size()];
             Iterator iter = totalAccountMap.entrySet().iterator();
@@ -619,7 +622,7 @@ public class GzfMainController extends BaseController {
             result.add(reportVO);
 
             reportVO = new FeeReportVO();
-            reportVO.setName("Êú™Áº¥Ë¥πÊÄªÊï∞");
+            reportVO.setName("Œ¥Ω…∑—◊‹ ˝");
             data = new String[rentAccountMap.size()];
             iter = rentAccountMap.entrySet().iterator();
             i = 0;
@@ -629,7 +632,7 @@ public class GzfMainController extends BaseController {
                 data[i] = "" + gzfAccountList.size();
                 i++;
                 for (GzfAccount gzfAccount1 : gzfAccountList) {
-                    // Âà§Êñ≠ÊòØÂê¶Âú®ÂÆΩÈôêÊúüÂÜÖÁº¥Ë¥π
+                    // ≈–∂œ «∑Ò‘⁄øÌœﬁ∆⁄ƒ⁄Ω…∑—
                     if (gzfAccount1.getOverDay() <= extendDay) {
                         extendFeeAccount.add(gzfAccount1);
                     } else if (gzfAccount1.getOverDay() > extendDay) {
@@ -657,7 +660,7 @@ public class GzfMainController extends BaseController {
     }
 
     /**
-     * Ê†πÊçÆÊù°‰ª∂Ëé∑ÂèñËãëÊï∞ÊçÆ
+     * ∏˘æ›Ãıº˛ªÒ»°‘∑ ˝æ›
      *
      * @param villageId
      * @return
@@ -669,7 +672,7 @@ public class GzfMainController extends BaseController {
     }
 
     /**
-     * Áº¥Ë¥πË¥¶Âè∑ÂàóË°® -- Ê†πÊçÆË¥¶ÂçïÊü•ËØ¢
+     * Ω…∑—’À∫≈¡–±Ì -- ∏˘æ›’Àµ•≤È—Ø
      *
      * @param gzfAccount
      * @param pageAccount
@@ -679,7 +682,7 @@ public class GzfMainController extends BaseController {
      * @return
      */
     public Page<GzfAccount> fee2(GzfAccount gzfAccount,
-      Page<GzfAccount> pageAccount, String startDate, String endDate, int type) {
+                                 Page<GzfAccount> pageAccount, String startDate, String endDate, int type) {
         Page<GzfAccount> page = accountService.findAllList(gzfAccount, pageAccount);
         Date startTime = null;
         Date endTime = null;
@@ -689,7 +692,7 @@ public class GzfMainController extends BaseController {
             startDate += " 00:00:00";
             try {
                 startTime = simpleDateFormat.parse(
-                  startDate);
+                        startDate);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -698,7 +701,7 @@ public class GzfMainController extends BaseController {
             endDate += " 23:59:59";
             try {
                 endTime = simpleDateFormat.parse(
-                  endDate);
+                        endDate);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -721,7 +724,7 @@ public class GzfMainController extends BaseController {
                     gzfAcctItem.setStatisStartDate(startTime);
                     gzfAcctItem.setStatisEndDate(endTime);
                     Date feeExpireDate = balanceService.getFeeExpireDate(housePerson,
-                      type);
+                            type);
                     List<GzfAcctItem> gzfAcctItemList = gzfAcctItemService.customGet(gzfAcctItem);
                     int gzfAcctItemListSize = gzfAcctItemList.size();
                     long now = System.currentTimeMillis();
@@ -730,11 +733,11 @@ public class GzfMainController extends BaseController {
                     Integer overDay = 0;
                     if (isOwnMoney) {
                         overDay = (int) Math
-                          .ceil((double) (now - feeExpireDate.getTime()) / 1000 / 3600 / 24);
+                                .ceil((double) (now - feeExpireDate.getTime()) / 1000 / 3600 / 24);
                         overDay = (int) Math
-                          .ceil(
-                            (double) (now - gzfAcctItemList.get(0).getCreateDate().getTime()) / 1000
-                              / 3600 / 24);
+                                .ceil(
+                                        (double) (now - gzfAcctItemList.get(0).getCreateDate().getTime()) / 1000
+                                                / 3600 / 24);
                     }
                     account.setHousePerson(housePerson);
                     account.setUpdateDate(feeExpireDate);
@@ -752,7 +755,7 @@ public class GzfMainController extends BaseController {
                     if (isOwnMoney) {
                         GzfAcctItem lastGzfAccItem = gzfAcctItemList.get(gzfAcctItemListSize - 1);
                         account
-                          .setFee(lastGzfAccItem.getReceAmount() - lastGzfAccItem.getFactAmount());
+                                .setFee(lastGzfAccItem.getReceAmount() - lastGzfAccItem.getFactAmount());
                         account.setUpdateDate(lastGzfAccItem.getEndDate());
                     } else {
                         account.setFee(0d);
@@ -769,7 +772,7 @@ public class GzfMainController extends BaseController {
         if (housePerson == null) {
             return null;
         }
-        //‰ΩèÊàø‰ø°ÊÅØ
+        //◊°∑ø–≈œ¢
         GzfHouseInfo houseInfo = houseInfoService.get(housePerson.getGzfHouseInfoId());
         if (houseInfo != null) {
             houseInfo.setGzfPalaces(placesService.get(houseInfo.getGzfPalacesId()));

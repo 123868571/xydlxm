@@ -143,31 +143,15 @@
 
                             <table id="province" class="table table-striped table-bordered table-hover">
                                 <tbody>
-                                <c:forEach var="item" items="${areaList}" varStatus="s">
-                                    <c:if test="${s.index % 6 eq 0}">
-                                    <tr class="odd gradeX">
-                                        <td id="area-${item.id}-td" >
-                                            <a id="area-${item.id}" data-id="${item.id}" class="area-control" href="javascript:">${item.name}</a>
-                                            <img class="thumbnail" src="${item.photo}" alt="区域缩略图" />
-                                                ${item.introduction}
-                                        </td>
-                                    </c:if>
-                                    <c:if test="${s.index % 6 ge 1 and s.index % 6 lt 5}">
-                                        <td id="area-${item.id}-td" >
-                                            <a id="area-${item.id}" data-id="${item.id}" class="area-control" href="javascript:">${item.name}</a>
-                                            <img class="thumbnail" src="${item.photo}" alt="区域缩略图" />
-                                                ${item.introduction}
-                                        </td>
-                                    </c:if>
-                                    <c:if test="${s.index % 6 eq 5}">
-                                        <td id="area-${item.id}-td" >
-                                            <a id="area-${item.id}" data-id="${item.id}" class="area-control" href="javascript:">${item.name}</a>
-                                            <img class="thumbnail" src="${item.photo}" alt="区域缩略图" />
-                                                ${item.introduction}
-                                        </td>
-                                    </tr>
-                                    </c:if>
-                                </c:forEach>
+
+                                <tr class="odd gradeX">
+                                    <td id="area-${areaList.id}-td" >
+                                        <span style="font-size:18px;font-weight:400">${areaList.name}</span>
+                                        <a id="area-${areaList.id}" data-id="${areaList.id}" class="area-control" href="javascript:">更多介绍</a>
+                                        <img class="thumbnail" src="${areaList.photo}" alt="区域缩略图" />
+                                        ${areaList.introduction}
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
 

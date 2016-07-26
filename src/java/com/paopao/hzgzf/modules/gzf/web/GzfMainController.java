@@ -16,10 +16,8 @@ import com.paopao.hzgzf.modules.pay.entity.GzfAcctItem;
 import com.paopao.hzgzf.modules.pay.service.GzfAccountBalanceService;
 import com.paopao.hzgzf.modules.pay.service.GzfAccountService;
 import com.paopao.hzgzf.modules.pay.service.GzfAcctItemService;
-import com.paopao.hzgzf.modules.sys.entity.Area;
-import com.paopao.hzgzf.modules.sys.entity.Dict;
-import com.paopao.hzgzf.modules.sys.entity.Office;
-import com.paopao.hzgzf.modules.sys.entity.User;
+import com.paopao.hzgzf.modules.sys.entity.*;
+import com.paopao.hzgzf.modules.sys.service.HonorWallService;
 import com.paopao.hzgzf.modules.sys.service.OfficeService;
 import com.paopao.hzgzf.modules.sys.utils.AreaUtils;
 import com.paopao.hzgzf.modules.sys.utils.DictUtils;
@@ -76,17 +74,23 @@ public class GzfMainController extends BaseController {
     @Autowired
     GzfAcctItemService gzfAcctItemService;
 
+    @Autowired
+    HonorWallService honorWallService;
+
 
     @RequestMapping("/index")
     public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
         User user = UserUtils.getUser();
 
-        // area
-//        List<Area> areaList = getAreaListByPid("1");
-
+        //首页显示当前操作人的区域信息
         Area areaList = user.getOffice().getArea();
 
         model.addAttribute("areaList", areaList);
+
+        //首页显示系统中的荣誉墙，只显示5个
+        List<HonorWall> honorwallList = honorWallService.findAll();
+
+        model.addAttribute("honorwallList", honorwallList);
 
         String villageId = request.getParameter("villageId");
         String palacesId = request.getParameter("palacesId");

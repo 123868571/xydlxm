@@ -56,60 +56,11 @@
     <!-- END HEAD -->
 
     <!-- BEGIN BODY -->
-
     <body>
-
-
-
-        <!-- BEGIN PAGE HEADER-->
-
-        <div class="row-fluid">
-
-            <div class="span12">
-
-                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
-
-                <h6></h6>
-
-                <ul class="breadcrumb">
-
-                    <%--<li>--%>
-
-                        <%--<i class="icon-home"></i>--%>
-
-                        <%--<a href="index.html">概况总览</a>--%>
-
-                    <%--</li>--%>
-
-                    <li class="pull-right no-text-shadow">
-
-                        <div id="dashboard-report-range" class="dashboard-date-range tooltips no-tooltip-on-touch-device responsive" data-tablet="" data-desktop="tooltips" data-placement="top" >
-
-                            <i class="icon-calendar"></i>
-
-                            <span></span>
-
-                            <i class="icon-angle-down"></i>
-
-                        </div>
-
-                    </li>
-
-                </ul>
-
-                <!-- END PAGE TITLE & BREADCRUMB-->
-
-            </div>
-
-        </div>
-
-        <!-- END PAGE HEADER-->
 
         <div id="dashboard">
 
             <!-- BEGIN DASHBOARD STATS -->
-
-
 
             <!-- END DASHBOARD STATS -->
 
@@ -120,26 +71,11 @@
                 <div class="span6">
 
                     <!-- BEGIN REGIONAL STATS PORTLET-->
-
-
-
-
                     <div class="portlet">
 
                         <div class="portlet-title">
 
                             <div class="caption"><i class="icon-globe"></i>权限总览</div>
-
-                            <div class="tools">
-
-                                <a href="" class="margin-r-20">省</a>
-                                <a href="" class="margin-r-20">市</a>
-                                <a href="" class="margin-r-20">区</a>
-
-                                <a href="" class="margin-r-20"><i class="icon-arrow-left"></i> 返回</a>
-                                <input type="checkbox"/>开关
-
-                            </div>
 
                             <table id="province" class="table table-striped table-bordered table-hover">
                                 <tbody>
@@ -155,36 +91,20 @@
                                 </tbody>
                             </table>
 
+                            <div class="caption"><i class="icon-globe"></i>荣誉墙</div>
 
-
-                            <table id="city" class="table table-striped table-bordered table-hover hide">
+                            <table id="honorwall" class="table table-striped table-bordered table-hover">
                                 <tbody>
-                                    <tr class="odd gradeX">
-                                        <td><a href="area_map.html" target="_self">杭州市</a></td>
-                                        <td>建德市</td>
-                                        <td>富阳市</td>
-                                        <td>临安市</td>
-                                        <td>宁波市</td>
-                                        <td>余姚市</td>
-                                    </tr>
+                                <tr class="odd gradeX">
+                                <c:forEach var="item" items="${honorwallList}" varStatus="s" begin="0" end="2" step="1" >
+                                        <td id="honorwall-${item.id}-td">
+                                            <img class="thumbnail" src="${item.photo}" alt="荣誉照片"  />
+                                            ${item.introduction}
+                                        </td>
+                                </c:forEach>
+                                </tr>
                                 </tbody>
                             </table>
-
-
-
-
-                            <div class="caption"><i class="icon-globe"></i>操作向导</div>
-                            <div class="tools">
-
-                                <a href="" class="reload"></a>
-
-                                <a href="province_map.html" target="_self">省权限</a>
-                                <a href="city_map.html" target="_self">市权限</a>
-                                <a href="#" target="_self">区权限1空</a>
-                                <a href="area_map.html" target="_self">区权限2</a>
-                                <a href="province_map.html" target="_self">小区管理空</a>
-
-                            </div>
                         </div>
 
                         <div class="portlet-body">

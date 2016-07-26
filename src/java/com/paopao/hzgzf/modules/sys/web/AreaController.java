@@ -8,7 +8,6 @@ import com.google.common.collect.Maps;
 import com.paopao.hzgzf.common.config.Global;
 import com.paopao.hzgzf.common.utils.StringUtils;
 import com.paopao.hzgzf.common.web.BaseController;
-import com.paopao.hzgzf.modules.gzf.entity.GzfHousePerson;
 import com.paopao.hzgzf.modules.sys.entity.Area;
 import com.paopao.hzgzf.modules.sys.service.AreaService;
 import com.paopao.hzgzf.modules.sys.utils.UserUtils;
@@ -79,22 +78,23 @@ public class AreaController extends BaseController {
 		return "modules/sys/areaForm";
 	}
 
-	@RequiresPermissions("sys:sysAreaInfo:view")
+	@RequiresPermissions("sys:area:view")
 	@RequestMapping(value = "detail")
-	public String detail(Area area,
+	public String detail(Area areaInfo,
 						 HttpServletRequest request, HttpServletResponse response, Model model) {
-		if (area != null) {
-			if (!area.getId().isEmpty()) {
-				Area gzfhp = new Area();
-				if (gzfhp != null) {
-					gzfhp = areaService.get();
-
+		Area ai = new Area();
+		Area pai = new Area();
+		if (areaInfo != null) {
+			if (!areaInfo.getId().isEmpty()) {
+				ai = areaService.get(areaInfo.getId());
+				if (ai != null) {
+					pai = areaService.get(ai.getParentId());
+					ai.setParent(pai);
 				}
 			}
 		}
 
-		model.addAttribute("sysAreaInfo", area == null ? new Area() : gzfhhi);
-
+		model.addAttribute("sysAreaInfo", ai);
 
 		return "modules/sys/areaInformation";
 	}

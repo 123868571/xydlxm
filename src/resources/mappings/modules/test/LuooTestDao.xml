@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paopao.hzgzf.modules.test.dao.LuooTestDao">
+    
+	<sql id="luooTestColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.age AS "age",
+		a.remark AS "remark"
+	</sql>
+	
+	<sql id="luooTestJoins">
+	</sql>
+    
+	<select id="get" resultType="LuooTest">
+		SELECT 
+			<include refid="luooTestColumns"/>
+		FROM luoo_test a
+		<include refid="luooTestJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="LuooTest">
+		SELECT 
+			<include refid="luooTestColumns"/>
+		FROM luoo_test a
+		<include refid="luooTestJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="LuooTest">
+		SELECT 
+			<include refid="luooTestColumns"/>
+		FROM luoo_test a
+		<include refid="luooTestJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO luoo_test(
+			id,
+			name,
+			age,
+			remark
+		) VALUES (
+			#{id},
+			#{name},
+			#{age},
+			#{remark}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE luoo_test SET 	
+			name = #{name},
+			age = #{age},
+			remark = #{remark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM luoo_test
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
